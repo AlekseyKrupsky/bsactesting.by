@@ -1,0 +1,172 @@
+input[type=radio].check ,input[type=checkbox].check{
+    display: none;
+}
+
+input[type=radio].check + label,input[type=checkbox].check + label{
+    cursor: pointer;
+}
+
+
+input[type=radio].check:checked + label ,input[type=checkbox].check:checked + label{
+    background: #2ab27b;
+    border: 1px solid #2ab27b;
+}
+
+input[type=radio].check + label.test-answer,input[type=checkbox].check + label.test-answer{
+    cursor: pointer;
+    padding: 5px 15px;
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+input[type=radio].check:checked + label.test-answer ,input[type=checkbox].check:checked + label.test-answer{
+    background: #dff0d8;
+    border: 1px solid #d6e9c6;
+    color: #2ab27b;
+}
+
+.logo {
+    width: 40px;
+    margin-right: 10px;
+}
+.navbar-header {
+    display: flex;
+    align-items: center;
+}
+.answer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.question-admin {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.question-admin .wrapper{
+    background: #2a88bd;
+    cursor: pointer;
+    color: white;
+}
+
+.answers-admin {
+    display: none;
+    transition: 350ms;
+}
+
+.answers-admin.active {
+    display: block;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: row;
+}
+
+.buttons .btn {
+    margin-left: 5px;
+}
+
+form.delete {
+    width: min-content;
+}
+
+
+
+.test-result {
+
+}
+.test-result .wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.pie {
+    display: inline-block;
+    margin: .5em;
+    width: 10em;
+    height: 10em;
+    position: relative;
+    border-radius: 50%;
+}
+
+.pie:after {
+    border-radius: 50%;
+    display: block;
+    content: "";
+    background: #fff;
+    position: absolute;
+    left: .5em;
+    top: .5em;
+    height: 9em;
+    width: 9em;
+}
+
+.pie span {
+    font-size: 48px;
+    position: absolute;
+    left:50%;
+    top:50%;
+    transform: translate(-50%,-50%);
+    z-index: 10;
+}
+
+.p0 {
+    background-image: linear-gradient(180deg, #ddd 50%, transparent 50%),
+    linear-gradient(0deg, #ddd 50%, steelblue 50%);
+}
+
+.p1 {
+    background-image: linear-gradient(-54deg, #ddd 50%, transparent 50%),
+    linear-gradient(90deg, #ddd 50%, steelblue 50%);
+}
+
+.p2 {
+    background-image: linear-gradient(-18deg, #ddd 50%, transparent 50%),
+    linear-gradient(90deg, #ddd 50%, steelblue 50%);
+}
+
+.p3 {
+    background-image: linear-gradient(18deg, #ddd 50%, transparent 50%),
+    linear-gradient(90deg, #ddd 50%, steelblue 50%);
+}
+
+.p4 {
+    background-image: linear-gradient(54deg, #ddd 50%, transparent 50%),
+    linear-gradient(90deg, #ddd 50%, steelblue 50%);
+}
+
+.p5 {
+    background-image: linear-gradient(90deg, #ddd 50%, steelblue 50%);
+}
+
+.p6 {
+    background-image: linear-gradient(126deg, transparent 50%, steelblue 50%),
+    linear-gradient(90deg, #ddd 50%, steelblue 50%);
+}
+
+.p7 {
+    background-image: linear-gradient(162deg, transparent 50%, steelblue 50%),
+    linear-gradient(90deg, #ddd 50%, steelblue 50%);
+}
+
+.p8 {
+    background-image: linear-gradient(198deg, transparent 50%, steelblue 50%),
+    linear-gradient(90deg, #ddd 50%, steelblue 50%);
+}
+
+.p9 {
+    background-image: linear-gradient(234deg, transparent 50%, steelblue 50%),
+    linear-gradient(90deg, #ddd 50%, steelblue 50%);
+}
+
+.p10 {
+    background-image: linear-gradient(270deg, transparent 50%, steelblue 50%),
+    linear-gradient(90deg, #ddd 50%, steelblue 50%);
+}
+
+
+
