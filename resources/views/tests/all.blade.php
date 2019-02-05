@@ -68,7 +68,4 @@
             <p>Список пуст</p>
         @endforelse
     </div>
-
-
-
 @endsection

@@ -21,7 +21,7 @@
                     <div class="form-group">
                         <label for="cost" class="col-md-4 control-label">Баллов за ответ</label>
                         <div class="col-md-8">
-                            <input type="text" class="form-control" name="cost" id="cost" value="{{$question->cost}}">
+                            <input type="text" class="form-control" name="cost" id="cost" value="{{$question->cost}}" required>
                         </div>
                     </div>
                 @endif

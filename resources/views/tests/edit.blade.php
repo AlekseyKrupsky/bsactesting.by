@@ -89,17 +89,18 @@
                     </div>
                 </div>
             @endforeach
-                    <div class="col-md-4">
-                        <b>Всего вопросов</b>
-                    </div>
-                    <div class="col-md-6">
-                        <span class="quest_count">
+                </div>
+
+                <div class="alert alert-info col-md-10">
+                    <b>В тесте будет выведено</b>
+                    <span class="quest_count">
                             <b>
-                                {{array_sum($question_info)}}
+                               @if(!empty($question_info)) {{array_sum($question_info)}} @endif
                             </b>
                         </span>
-                    </div>
+                    <b>вопрос(ов)</b>
                 </div>
+
                 <div class="row">
                     <div class="col-md-12"><h4><b>Критерии оценивания</b></h4></div>
             @for($i=0; $i<=10;$i++)
@@ -162,9 +163,15 @@
             </div>
 
         @empty
-            <div class="col-md-12 alert alert-warning">Пока нет ни одного вопроса. Необходимо добавить минимум <b>
-                    @if(!$test->mark_system=='difficult'){{$test->quest_number}}@else {{array_sum($question_info)}}@endif
-                </b></div>
+
+                    @if($test->mark_system!='difficult')
+            <div class="col-md-12 alert alert-warning">Пока нет ни одного вопроса. Необходимо добавить минимум <b>  {{$test->quest_number}}</b></div>
+                    @else
+                        {{--@if(!empty($question_info))--}}
+                            {{--{{array_sum($question_info)}}--}}
+                        {{--@endif--}}
+                    @endif
+
     @endforelse
 </div>
         @else

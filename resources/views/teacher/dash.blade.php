@@ -13,7 +13,7 @@
                 <h3>Выберите предмет</h3>
                     <div class="form-group">
                 @foreach($subjects as $subject)
-                            <input type="radio" id="s{{$subject->id}}" name="subject" class="check" value="{{$subject->id}}" @if($loop->index==0) checked @endif>
+                            <input type="radio" id="s{{$subject->id}}" name="subject" class="check" value="{{$subject->id}}" @if($subject->id==$subject_show->id) checked @endif>
                             <label for="s{{$subject->id}}" class="alert alert-danger test-answer">
                                 {{$subject->name}}
                             </label>
@@ -64,7 +64,6 @@
                         </td>
                     @endforeach
                 </tr>
-
                 @endforeach
         </table>
         @endif

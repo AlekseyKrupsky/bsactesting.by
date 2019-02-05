@@ -35,7 +35,6 @@ $('.open-ans').click(function () {
   }
   else {
       $('#quest-'+id).addClass('active');
-
   }
 
 });
@@ -55,6 +54,7 @@ $('.test-cost').change(function () {
         count+=parseInt($($('.test-cost')[i]).val());
     }
     $('.test-max[data-max=10]').val(max);
+    $('.test-max').attr('max',max);
     $('span.quest_count b').text(count);
 });
 
