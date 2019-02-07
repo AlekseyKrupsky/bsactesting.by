@@ -37,15 +37,17 @@
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
+
+                    @if(Auth::check())
                     <ul class="nav navbar-nav">
                         &nbsp;<li><a href="{{route('groups')}}">Группы</a></li>
-                        {{--<li><a href="{{route('teachers')}}">Преподаватели</a></li>--}}
+                        <li><a href="{{route('teachers')}}">Преподаватели</a></li>
                         <li><a href="{{route('subjects')}}">Предметы</a></li>
                         <li><a href="{{route('tests')}}">Редактировать тесты</a></li>
                         <li><a href="{{route('teacher')}}">Страница преподавателя</a></li>
                         <li><a href="{{route('show_tests')}}">Пройти тест</a></li>
                     </ul>
-
+                    @endif
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Authentication Links -->

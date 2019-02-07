@@ -58,6 +58,27 @@ $('.test-cost').change(function () {
     $('span.quest_count b').text(count);
 });
 
+
+
+var timer;
+
+timer = setTimeout(myTimer,1000);
+
+
+function myTimer() {
+// console.log(123);
+// clearInterval(timer);
+    var time = parseInt($('.timer span').text());
+    $('.timer span').text(time-1);
+
+timer = setTimeout(myTimer,1000);
+}
+
+
+
+
+//$('.timer')
+
 // $('.complete-test').click(function (eo) {
 //    eo.preventDefault();
 //

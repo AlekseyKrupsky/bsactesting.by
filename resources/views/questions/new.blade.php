@@ -23,7 +23,11 @@
                         <input type="text" class="form-control" name="cost" id="cost" required>
                     </div>
                 </div>
-                    @endif
+                @else
+                    <input type="hidden" class="form-control" value="0" name="cost" id="cost" required>
+                @endif
+
+
             </div>
             <div class="row">
                 <div class="col-md-12">

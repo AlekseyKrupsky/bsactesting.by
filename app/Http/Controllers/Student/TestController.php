@@ -53,7 +53,7 @@ class TestController extends Controller
             //dump($questions);
 
           // dump($std_ans->id);
-            return view('student.test',['test'=>$test,'questions'=>$questions,'stdans_id'=>$std_ans->id]);
+            return view('student.test',['test'=>$test,'questions'=>$questions,'stdans_id'=>$std_ans->id,'time'=>$test->time*60]);
         }
 
         else {
@@ -61,7 +61,8 @@ class TestController extends Controller
            // dump($std_ans);
             $questions = unserialize($std_ans->answer);
             //dump($std_ans->id);
-            return view('student.test',['test'=>$test,'questions'=>$questions,'stdans_id'=>$std_ans->id]);
+            $time = $test->time*60 - time() + $std_ans->created_at->timestamp;
+            return view('student.test',['test'=>$test,'questions'=>$questions,'stdans_id'=>$std_ans->id,'time'=>$time]);
         }
         //dump(Auth::user()->stdanswers->where('mark','')->where('test_id',$id)->count());
         //return view('student.test',['test'=>$test,'questions'=>$questions]);

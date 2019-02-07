@@ -3,6 +3,9 @@
 @section('content')
 
     <div class="container">
+        <div class="timer">
+            Осталось <span>{{$time}}</span>
+        </div>
         <form action="{{route('show_test',$test->id)}}" method="post">
             {{csrf_field()}}
             <div class="row">

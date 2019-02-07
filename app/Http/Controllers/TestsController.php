@@ -43,8 +43,16 @@ class TestsController extends Controller
         $answers = Answer::whereIn('question_id',$questions->pluck('id')->toArray())->get();
         //dump($answers);
        // dump($answers->where('question_id',30)[0]);
-        $quest_count = array_count_values($questions->pluck('cost')->toArray());
-        ksort($quest_count);
+        //dump($questions->pluck('cost')->toArray());
+        //
+
+        $quest_count = [];
+        if($test->mark_system == 'difficult') {
+            $quest_count = array_count_values($questions->pluck('cost')->toArray());
+            ksort($quest_count);
+        }
+
+
         $mark_system = $test->mark_system()->first();
         $maximum = 0;
 
@@ -58,19 +66,19 @@ class TestsController extends Controller
         else $question_info = $mark_info = null;
 
 
-
+        //    dump($test->mark_system);
 
         return view('tests.edit',
-            [
+         [
             'test'=>$test,
             'subjects'=>$subjects,
             'user'=>Auth::user(),
             'questions'=>$questions,
             'quest_count'=>$quest_count,
-                'question_info'=>$question_info,
-                'mark_info'=>$mark_info,
-                'maximum'=>$maximum,
-                'answers'=>$answers
+            'question_info'=>$question_info,
+            'mark_info'=>$mark_info,
+            'maximum'=>$maximum,
+            'answers'=>$answers
         ]
         );
     }

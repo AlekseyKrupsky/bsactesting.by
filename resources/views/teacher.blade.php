@@ -37,10 +37,8 @@
                             <input type="hidden" name="role" value="unsign_teacher">
                             <input class="btn btn-primary" type="submit" value="Деактивировать">
                         </form>
-
                             <div>
-
-                                <form action="{{route('teachers',$teacher->id)}}" method="post">
+                                <form action="{{route('teacher_update',$teacher->id)}}" method="post">
                                     {{csrf_field()}}
                                     {{method_field('patch')}}
                                     <div class="col-md-6">

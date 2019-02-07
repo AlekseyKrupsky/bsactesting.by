@@ -18,8 +18,20 @@ class TeachersController extends Controller
         }
         elseif(Auth::user()->role=='admin')
             $subjects = Subject::all();
+
+
         $groups = Group::all();
-        return view('teacher.dash',['subjects'=>$subjects,'groups'=>$groups,
-            'group_show'=>Group::find($request->group),'subject_show'=>Subject::find($request->subject)]);
+    if($request){
+        $group = $request->group?Group::find($request->group):null;
+        $subject = $request->subject?Subject::find($request->subject):null;
     }
+
+
+        return view('teacher.dash',['subjects'=>$subjects,'groups'=>$groups,
+            'group_show'=>$group,'subject_show'=>$subject]);
+    }
+
+
+
+
 }

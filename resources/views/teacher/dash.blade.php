@@ -13,7 +13,7 @@
                 <h3>Выберите предмет</h3>
                     <div class="form-group">
                 @foreach($subjects as $subject)
-                            <input type="radio" id="s{{$subject->id}}" name="subject" class="check" value="{{$subject->id}}" @if($subject->id==$subject_show->id) checked @endif>
+                            <input type="radio" id="s{{$subject->id}}" name="subject" class="check" value="{{$subject->id}}" @if(!empty($subject_show) && $subject->id==$subject_show->id) checked @endif>
                             <label for="s{{$subject->id}}" class="alert alert-danger test-answer">
                                 {{$subject->name}}
                             </label>
@@ -25,7 +25,7 @@
 
                         <select name="group" id=""  class="form-control">
                 @foreach($groups as $group)
-                                <option  class="form-control" value="{{$group->id}}">{{$group->name}}</option>
+                                <option  class="form-control" value="{{$group->id}}" @if(!empty($group_show) && $group->id==$group_show->id)selected @endif>{{$group->name}}</option>
                 @endforeach
                         </select>
                 </div>
@@ -38,10 +38,11 @@
                 </div>
             </div>
         </form>
-        @if($group_show)
-        <h3>Группа {{$group_show->name}}</h3>
-        <table>
+        @if(!empty($group_show))
+        <h3>Группа {{$group_show->name}}, результаты тестов по предмету {{$subject_show->name}}</h3>
+        <table class="student_result">
             <tr>
+                <td>№</td>
                 <td>ФИО студента</td>
                 @foreach($subject_show->tests as $test)
                     <td>
@@ -49,9 +50,9 @@
                     </td>
                 @endforeach
             </tr>
-
-            @foreach($group_show->users as $user)
+            @foreach($group_show->users()->orderBy('name')->get() as $user)
                 <tr>
+                    <td>{{$loop->index+1}}</td>
                     <td>{{$user->name}}</td>
                     @foreach($subject_show->tests as $test)
                         <td>

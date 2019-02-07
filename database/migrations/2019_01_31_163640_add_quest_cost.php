@@ -15,7 +15,7 @@ class AddQuestCost extends Migration
     {
         Schema::table('questions', function (Blueprint $table) {
             //
-            $table->integer('cost')->unsigned()->nullable();
+            $table->integer('cost')->unsigned()->nullable()->default(0);
         });
     }
 

@@ -168,5 +168,16 @@ form.delete {
     linear-gradient(90deg, #ddd 50%, steelblue 50%);
 }
 
+.student_result {
 
+}
 
+table {
+    border-collapse: collapse; /* Убираем двойные линии между ячейками */
+    border: 2px solid #f5f8fa; /* Прячем рамку вокруг таблицы */
+}
+.student_result TD {
+    padding: 3px 7px; /* Поля вокруг содержимого таблицы */
+    border: 1px solid #afb0b2; /* Параметры рамки */
+    text-align: left; /* Выравнивание по левому краю */
+}

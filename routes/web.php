@@ -11,6 +11,9 @@
 |
 */
 
+//dump(Route::getRoutes());
+
+
 Auth::routes();
 
 Route::middleware('auth')->get('/', 'HomeController@index')->name('home');
@@ -22,7 +25,7 @@ Route::prefix('admin')->middleware(['auth','onlyAdmin'])->group(function () {
     Route::delete('/group/{id}', 'Admin\GroupController@destroy')->name('delete_group');
 
     Route::get('/teachers', 'Admin\TeacherController@index')->name('teachers');
-    Route::patch('/teachers/{id}', 'Admin\TeacherController@update')->name('teachers');
+    Route::patch('/teachers/{id}', 'Admin\TeacherController@update')->name('teacher_update');
 
     Route::get('/subjects', 'Admin\SubjectController@index')->name('subjects');
     Route::post('/subjects', 'Admin\SubjectController@store');
