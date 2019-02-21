@@ -1,12 +1,15 @@
 @extends('layouts.app')
-
 @section('content')
+
+    <div class="low-time alert alert-info text-center">
+        Внимание! Осталось меньше 2-х минут. По окончании тест отправится автоматически
+    </div>
 
     <div class="container">
         <div class="timer">
             Осталось <span>{{$time}}</span>
         </div>
-        <form action="{{route('show_test',$test->id)}}" method="post">
+        <form class="test-form" action="{{route('show_test',$test->id)}}" method="post">
             {{csrf_field()}}
             <div class="row">
                 <h2>Тест по теме "{{$test->name}}"</h2>

@@ -2,12 +2,11 @@
 
 namespace App\Http\Middleware;
 
-use App\User;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Response;
 
-class onlyAdmin
+class AcceptStudent
 {
     /**
      * Handle an incoming request.
@@ -18,7 +17,8 @@ class onlyAdmin
      */
     public function handle($request, Closure $next)
     {
-        if(Auth::user()->role=='admin')  return $next($request);
-        return new Response(view('access_denied'));
+        if(Auth::user()->role=='unsign_student')
+        return new Response(view('access_denied',['message'=>'Ваш аккаунт не подтвержден!']));
+        return $next($request);
     }
 }

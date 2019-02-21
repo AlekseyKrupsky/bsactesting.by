@@ -60,17 +60,42 @@ $('.test-cost').change(function () {
 
 
 
+
+$('.low-time').click(function () {
+$(this).fadeOut(300);
+});
+
+
 var timer;
-
 timer = setTimeout(myTimer,1000);
-
-
 function myTimer() {
-// console.log(123);
-// clearInterval(timer);
-    var time = parseInt($('.timer span').text());
-    $('.timer span').text(time-1);
+    var time = $('.timer span').text();
 
+    var min = parseInt(time.split(':')[0]);
+    var sec = parseInt(time.split(':')[1]);
+
+    if(min<2) {
+        $('.low-time').animate({
+            top:55
+        });
+    }
+
+    if(min===0 && sec===0) {
+        $('form.test-form').submit();
+    }
+
+    if(sec) {
+        sec=sec-1;
+        if(sec<10) sec= "0"+sec;
+        if(!sec) sec = "00";
+    }
+    else {
+        sec = 59;
+        min=min-1;
+        if(!min) min="00";
+    }
+
+    $('.timer span').text(min+":"+sec);
 timer = setTimeout(myTimer,1000);
 }
 

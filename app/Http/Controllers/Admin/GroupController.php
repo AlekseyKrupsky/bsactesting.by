@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Model\Group;
-
+use App\User;
 
 class GroupController extends Controller
 {
@@ -21,12 +21,14 @@ class GroupController extends Controller
         //
     $groups = Group::all();
 
+    $users = User::whereIn('group_id',$groups->pluck('id')->toArray())->orderBy('name')->get();
+//    dump($users);
+//        dump($users->where('group_id',5));
 //        foreach ($groups as $group) {
 //            if($group->headman)
 //            dump($group->headmanUser->name);
 //    }
-
-        return view('group',['groups'=>$groups]);
+        return view('group',['groups'=>$groups,'users'=>$users]);
     }
 
     /**
@@ -78,6 +80,7 @@ class GroupController extends Controller
     public function edit($id)
     {
         //
+
     }
 
     /**
@@ -89,7 +92,8 @@ class GroupController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Group::find($id)->update($request->all());
+        return back();
     }
 
     /**

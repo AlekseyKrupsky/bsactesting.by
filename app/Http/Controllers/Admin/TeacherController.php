@@ -23,16 +23,9 @@ class TeacherController extends Controller
     {
         $subjects_connect = $request->subjects_connect;
         $subjects_disconnect = $request->subjects_disconnect;
-       // dump($subjects_connect);
-       // dump($subjects_disconnect);
         $teacher = User::find($id);
         $teacher->connectSubject($subjects_connect);
         $teacher->disconnectSubject($subjects_disconnect);
-
-
-
-       // dump($request->all());
-        //$teacher->update($request->all());
         return back();
     }
 }

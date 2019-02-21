@@ -3,23 +3,6 @@
 @section('content')
 
     <div class="container">
-        <h3>Список новых преподавателей:</h3>
-        @forelse($teachers->where('role','unsign_teacher') as $teacher)
-            <div class="row">
-                <div class="col-6">
-                    {{$loop->index+1}}.  {{$teacher->name}}
-                    <form action="{{route('teachers',$teacher->id)}}" method="post">
-                        {{csrf_field()}}
-                        {{method_field('patch')}}
-                        <input type="hidden" name="role" value="teacher">
-                        <input class="btn btn-primary" type="submit" value="Активировать">
-                    </form>
-                </div>
-            </div>
-            @empty
-                <p>Список пуст</p>
-        @endforelse
-
         <h3>Список преподавателей:</h3>
         @forelse($teachers->where('role','teacher') as $teacher)
                 <div class="row">

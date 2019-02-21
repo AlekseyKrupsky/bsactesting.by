@@ -20,7 +20,6 @@
         <nav class="navbar navbar-default navbar-static-top">
             <div class="container">
                 <div class="navbar-header">
-
                     <!-- Collapsed Hamburger -->
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
                         <span class="sr-only">Toggle Navigation</span>
@@ -34,14 +33,22 @@
                         {{ config('app.name', 'Laravel') }}
                     </a>
                 </div>
-
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
-
                     @if(Auth::check())
                     <ul class="nav navbar-nav">
-                        &nbsp;<li><a href="{{route('groups')}}">Группы</a></li>
-                        <li><a href="{{route('teachers')}}">Преподаватели</a></li>
+                          <li class="dropdown">
+                              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Пользователи <span class="caret"></span></a>
+                              <ul class="dropdown-menu" role="menu">
+                                  <li>
+                                      <a href="{{route('new_users')}}"  >Новые пользователи</a>
+                                  </li>
+                                  <li>
+                                      <a href="{{route('teachers')}}">Преподаватели</a>
+                                  </li>
+                              </ul>
+                          </li>
+                        <li><a href="{{route('groups')}}">Группы</a></li>
                         <li><a href="{{route('subjects')}}">Предметы</a></li>
                         <li><a href="{{route('tests')}}">Редактировать тесты</a></li>
                         <li><a href="{{route('teacher')}}">Страница преподавателя</a></li>

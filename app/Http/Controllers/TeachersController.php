@@ -27,8 +27,12 @@ class TeachersController extends Controller
     }
 
 
-        return view('teacher.dash',['subjects'=>$subjects,'groups'=>$groups,
-            'group_show'=>$group,'subject_show'=>$subject]);
+        return view('teacher.dash',[
+            'subjects'=>$subjects,
+            'groups'=>$groups,
+            'group_show'=>$group,
+            'subject_show'=>$subject
+        ]);
     }
 
 

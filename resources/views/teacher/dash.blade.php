@@ -13,7 +13,8 @@
                 <h3>Выберите предмет</h3>
                     <div class="form-group">
                 @foreach($subjects as $subject)
-                            <input type="radio" id="s{{$subject->id}}" name="subject" class="check" value="{{$subject->id}}" @if(!empty($subject_show) && $subject->id==$subject_show->id) checked @endif>
+                            <input type="radio" id="s{{$subject->id}}" name="subject" class="check"
+                                   value="{{$subject->id}}" @if((!empty($subject_show) && $subject->id==$subject_show->id) || $loop->index==0) checked @endif>
                             <label for="s{{$subject->id}}" class="alert alert-danger test-answer">
                                 {{$subject->name}}
                             </label>

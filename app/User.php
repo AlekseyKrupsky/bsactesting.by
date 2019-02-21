@@ -72,4 +72,10 @@ class User extends Authenticatable
     }
 
 
+    public function group()
+    {
+        return $this->hasOne('App\Model\Group');
+    }
+
+
 }

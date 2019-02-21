@@ -14,29 +14,34 @@ class TestController extends Controller
 {
     //
 
+
+    public function __construct()
+    {
+        $this->middleware('acceptstudent');
+    }
+
     public function index()
     {
-        $tests = Test::all();
-        return view('student.tests',['tests'=>$tests]);
+        $tests = Test::where('status','ready')->get();
+        $std_ans = StdAnswer::whereIn('test_id',$tests->pluck('id')->toArray())->get();
+       // dump($std_ans);
+        return view('student.tests',['tests'=>$tests,'std_ans'=>$std_ans]);
     }
     
     public function show($id)
     {
-
-            //если тесты пройдены но попали на страницу тест ??
-
+        //если тесты пройдены но попали на страницу тест ??
         $test = Test::find($id);
+        //$std_ans = Auth::user()->stdanswers->where('mark','')->where('test_id',$id);
+        $is_complete = $test->isComplete();
+//      dd($is_complete);
+        if($is_complete==-1) return $this->result($id);
 
-        $std_ans = Auth::user()->stdanswers->where('mark','')->where('test_id',$id);
 
-        if(!$std_ans->count()) {
+        elseif($is_complete==1) {
           // echo 1;
             if($test->mark_system=='simple') {
                 $questions = $test->questions->random($test->quest_number);
-//            dump($questions);
-//            echo serialize($questions);
-//            dump(unserialize(serialize($questions)));
-
             }
             else {
                 $cost_info = unserialize($test->mark_system()->first()->question_info);
@@ -44,33 +49,24 @@ class TestController extends Controller
                 $questions = collect();
                 foreach ($cost_info as $cost=>$count) {
                     $questions= $questions->concat($all_questions->where('cost',$cost)->random($count));
-
                 }
-
             }
-
             $std_ans = Auth::user()->addStdAnswer($id,serialize($questions));
-            //dump($questions);
-
-          // dump($std_ans->id);
-            return view('student.test',['test'=>$test,'questions'=>$questions,'stdans_id'=>$std_ans->id,'time'=>$test->time*60]);
+            $time = date('i:s',$test->time*60);
+            return view('student.test',['test'=>$test,'questions'=>$questions,'stdans_id'=>$std_ans->id,'time'=>$time]);
         }
 
         else {
             $std_ans = Auth::user()->stdanswers->where('mark','')->where('test_id',$id)->last();
-           // dump($std_ans);
             $questions = unserialize($std_ans->answer);
-            //dump($std_ans->id);
-            $time = $test->time*60 - time() + $std_ans->created_at->timestamp;
+            $time = date('i:s',$test->time*60 - time() + $std_ans->created_at->timestamp);
             return view('student.test',['test'=>$test,'questions'=>$questions,'stdans_id'=>$std_ans->id,'time'=>$time]);
         }
-        //dump(Auth::user()->stdanswers->where('mark','')->where('test_id',$id)->count());
-        //return view('student.test',['test'=>$test,'questions'=>$questions]);
     }
 
     public function check(Request $request)
     {
-       // dump($request->all());
+
         $test = Test::find($request->test);
         $qus = unserialize(StdAnswer::find(base64_decode($request->stdans))->answer);
         $total_mark = 0;
@@ -105,8 +101,6 @@ class TestController extends Controller
             }
         }
 
-
-
         $stdAns = Auth::user()->stdanswers->where('mark','')->where('test_id',$request->test)->last();
         if($test->mark_system=='difficult')
             $stdAns->mark = $mark_end;
@@ -114,7 +108,7 @@ class TestController extends Controller
         $stdAns->mark = round($total_mark/(Test::find($request->test)->quest_number)*10);
         $stdAns->answer=serialize($stdAns);
         $stdAns->save();
-        return redirect(route('test_result',$request->test));
+        return redirect(route('show_test',$request->test));
     }
 
 

@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Auth;
+use Illuminate\Http\Response;
 
 class Teachers
 {
@@ -18,6 +19,7 @@ class Teachers
     {
         if(Auth::user()->role == 'admin' || Auth::user()->role == 'teacher') return  $next($request);
 //        return view('access_denied'); //redirect('/login');
-        return redirect('/denied');
+        return new Response(view('access_denied'));
+
     }
 }

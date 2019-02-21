@@ -61,6 +61,16 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label for="mark_system" class="col-md-4 control-label">Статус теста</label>
+                        <div class="col-md-6">
+                            <select name="status" id="status" class="form-control">
+                                <option value="build" @if($test->status=='build') selected @endif>Создание</option>
+                                <option value="ready" @if($test->status=='ready') selected @endif>Рабочий</option>
+                                <option value="changing" @if($test->status=='changing') selected @endif>Изменение</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <div class="col-md-6">
                             <input type="submit" class="btn btn-success" value="Обновить">
                             <a class="btn btn-primary" href="{{route('question_add',$test->id)}}">Добавить вопрос</a>

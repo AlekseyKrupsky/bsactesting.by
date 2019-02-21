@@ -6,11 +6,12 @@ use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
+
 class Test extends Model
 {
     //
 
-    protected $fillable = ['name','time','quest_number','subject_id','mark_system'];
+    protected $fillable = ['name','time','quest_number','subject_id','mark_system','status'];
 
 
     public function questions()
@@ -29,22 +30,32 @@ class Test extends Model
         return $this->hasMany('App\Model\StdAnswer');
     }
 
-    public function isComplete(User $user)
+    public function isComplete()
     {
+
+        //dump($std_ans);
+
         //dump($this->stdanswers->where('mark','')->where('user_id',$user->id));
-        if(!$this->stdanswers->where('user_id',$user->id)->count()) {
+
+        //dump($this->stdanswers->where('user_id',\Auth::user()->id));
+
+
+        if(!$this->stdanswers->where('user_id',\Auth::user()->id)->count()) {
             return 1;//'Пройти';
         }
 
-        else if($this->stdanswers->where('mark','')->where('user_id',$user->id)->count()) {
+        else if($this->stdanswers->where('mark','')->where('user_id',\Auth::user()->id)->count()) {
 
             return 0;//'Продолжить';
 
         }
 
-        else if(!$this->stdanswers->where('mark','')->where('user_id',$user->id)->count()){
+        else if(!$this->stdanswers->where('mark','')->where('user_id',\Auth::user()->id)->count()){
             return -1;//'Сдан';
         }
+
+
+
     }
 
 

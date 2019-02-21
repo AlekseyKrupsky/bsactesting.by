@@ -13,16 +13,20 @@
 
 //dump(Route::getRoutes());
 
-
 Auth::routes();
 
 Route::middleware('auth')->get('/', 'HomeController@index')->name('home');
 
 Route::prefix('admin')->middleware(['auth','onlyAdmin'])->group(function () {
 
+    Route::get('/new_users', 'Admin\UserController@new_users')->name('new_users');
+    Route::patch('/new_users/{id}', 'Admin\UserController@update')->name('new_users_update');
+    Route::delete('/new_users/{id}', 'Admin\UserController@delete')->name('new_users_delete');
+
     Route::get('/groups', 'Admin\GroupController@index')->name('groups');
     Route::post('/groups', 'Admin\GroupController@store');
-    Route::delete('/group/{id}', 'Admin\GroupController@destroy')->name('delete_group');
+    Route::delete('/group/{id}', 'Admin\GroupController@destroy')->name('one_group');
+    Route::post('/group/{id}', 'Admin\GroupController@update')->name('one_group');
 
     Route::get('/teachers', 'Admin\TeacherController@index')->name('teachers');
     Route::patch('/teachers/{id}', 'Admin\TeacherController@update')->name('teacher_update');
@@ -59,11 +63,5 @@ Route::prefix('teacher/dashboard')->middleware(['auth','teachers'])->group(funct
 Route::prefix('student')->middleware('auth')->group(function () {
     Route::get('/tests','Student\TestController@index')->name('show_tests');
     Route::get('/test/{id}','Student\TestController@show')->name('show_test');
-    Route::post('/test/{id}','Student\TestController@check')->name('show_test');
-    Route::get('/test/result/{id}','Student\TestController@result')->name('test_result');
-});
-
-
-Route::get('/denied',function (){
-   return view('access_denied');
+    Route::post('/test/{id}','Student\TestController@check');
 });
