@@ -40,4 +40,15 @@ class Question extends Model
 
         }
     }
+
+    public function images()
+    {
+        return $this->hasMany('App\Model\Image');
+    }
+
+    public function addImage($path)
+    {
+        $this->images()->create(['path'=>$path]);
+    }
+
 }

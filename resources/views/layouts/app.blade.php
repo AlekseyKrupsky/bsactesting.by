@@ -41,10 +41,13 @@
                               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Пользователи <span class="caret"></span></a>
                               <ul class="dropdown-menu" role="menu">
                                   <li>
-                                      <a href="{{route('new_users')}}"  >Новые пользователи</a>
+                                      <a href="{{route('new_users')}}">Новые пользователи</a>
                                   </li>
                                   <li>
                                       <a href="{{route('teachers')}}">Преподаватели</a>
+                                  </li>
+                                  <li>
+                                      <a href="{{route('reset_password')}}">Сброс паролей</a>
                                   </li>
                               </ul>
                           </li>

@@ -30,8 +30,10 @@ class Test extends Model
         return $this->hasMany('App\Model\StdAnswer');
     }
 
-    public function isComplete()
+    public function isComplete($user_id = '')
     {
+
+        $user_id?true:$user_id=\Auth::user()->id;
 
         //dump($std_ans);
 
@@ -39,19 +41,26 @@ class Test extends Model
 
         //dump($this->stdanswers->where('user_id',\Auth::user()->id));
 
+        $user_answer = $this->stdanswers->where('user_id',$user_id);
 
-        if(!$this->stdanswers->where('user_id',\Auth::user()->id)->count()) {
-            return 1;//'Пройти';
+        if(!$user_answer->count()) {
+            return 1;//'Пройти'; //Пусто
         }
 
-        else if($this->stdanswers->where('mark','')->where('user_id',\Auth::user()->id)->count()) {
-
-            return 0;//'Продолжить';
+        else if($user_answer->where('mark','')->count()
+            && time()-$user_answer->last()->created_at->timestamp>$this->time*60) {
+            return -2;// Не отправил результат
 
         }
 
-        else if(!$this->stdanswers->where('mark','')->where('user_id',\Auth::user()->id)->count()){
-            return -1;//'Сдан';
+        else if($user_answer->where('mark','')->count()) {
+
+            return 0;//'Продолжить'; //Сдает
+
+        }
+
+        else if(!$this->stdanswers->where('mark','')->where('user_id',$user_id)->count()){
+            return -1;//'Сдан'; //Оценка
         }
 
 

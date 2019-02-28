@@ -85,14 +85,28 @@ class TestsController extends Controller
 
     public function update(Request $request,$id)
     {
+
+        $errors = [];
         $test = Test::find($id);
         if(Auth::user()->haveAccess($test)) {
             $test->update($request->all());
+            if($test->questions->count()==0){
+                $test->status='build';
+                $errors[] = 'В тесте нет вопросов, он сохранен со статусом "Создание"';
+            }
+
+            elseif($test->questions->count()<$test->quest_number && $request->status=='ready'){
+                $test->status='changing';
+                $errors[] = 'Количество вопросов в тесте ('.$test->questions->count().') меньше заявленного ('.$test->quest_number.'), 
+               не обходимо столько же или больше. Тест сохранен со статусом "Изменение"';
+            }
             $test->save();
-            return back();
+
         }
-        else $error = 'Произошла ошибка. Материал не изменен';
-        return back()->withErrors([$error]);
+        else $errors[] = 'Произошла ошибка. Материал не изменен';
+
+
+        return back()->withErrors($errors);
     }
 
     public function update_mark_system(Request $request,$id)

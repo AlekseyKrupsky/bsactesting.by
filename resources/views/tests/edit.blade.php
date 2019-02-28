@@ -27,7 +27,7 @@
                             <input  type="text" class="form-control" name="name" value="{{$test->name}}" required>
                         </div>
                     </div>
-                    @if(!$test->mark_system=='difficult')
+                    @if($test->mark_system!='difficult')
                         <div class="form-group">
                             <label for="quest_number" class="col-md-4 control-label">Количество вопросов</label>
                             <div class="col-md-6">
@@ -63,10 +63,10 @@
                     <div class="form-group">
                         <label for="mark_system" class="col-md-4 control-label">Статус теста</label>
                         <div class="col-md-6">
-                            <select name="status" id="status" class="form-control">
-                                <option value="build" @if($test->status=='build') selected @endif>Создание</option>
-                                <option value="ready" @if($test->status=='ready') selected @endif>Рабочий</option>
-                                <option value="changing" @if($test->status=='changing') selected @endif>Изменение</option>
+                            <select name="status" id="status" class="form-control" @if($questions->count()==0) disabled @endif>
+                                <option value="build" @if($test->status=='build' || $questions->count()==0) selected @endif>Создание</option>
+                                <option value="ready" @if($test->status=='ready' && $questions->count()>0) selected @endif>Рабочий</option>
+                                <option value="changing" @if($test->status=='changing' && $questions->count()>0) selected @endif>Изменение</option>
                             </select>
                         </div>
                     </div>

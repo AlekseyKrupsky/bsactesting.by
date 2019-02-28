@@ -4,7 +4,7 @@
 
     <div class="container">
 
-        <form action="{{route('question_add',$test->id)}}" method="post">
+        <form action="{{route('question_add',$test->id)}}" method="post" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-md-12">
                     <h3>Добавить новый вопрос для теста "{{$test->name}}"</h3>
@@ -26,7 +26,12 @@
                 @else
                     <input type="hidden" class="form-control" value="0" name="cost" id="cost" required>
                 @endif
-
+                <div class="form-group">
+                    <label for="image" class="col-md-4 control-label">Изображение</label>
+                    <div class="col-md-8">
+                        <input type="file" name="image" id="file">
+                    </div>
+                </div>
 
             </div>
             <div class="row">

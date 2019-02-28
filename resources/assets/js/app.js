@@ -16,6 +16,9 @@ window.Vue = require('vue');
  */
 
 Vue.component('example', require('./components/Example.vue'));
+Vue.component('reset', require('./components/Reset.vue'));
+Vue.component('userinfo', require('./components/UserInfo.vue'));
+Vue.component('alert',require('./components/Alert.vue'));
 
 const app = new Vue({
     el: '#app'

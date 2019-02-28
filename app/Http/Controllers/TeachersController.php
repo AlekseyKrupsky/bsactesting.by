@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Model\Group;
 use App\Model\Subject;
+use App\Model\Test;
 
 class TeachersController extends Controller
 {
@@ -20,6 +21,9 @@ class TeachersController extends Controller
             $subjects = Subject::all();
 
 
+        $tests = Test::whereIn('subject_id',$subjects->pluck('id')->toArray())->select(['id','name'])->get();
+//        dump($tests);
+
         $groups = Group::all();
     if($request){
         $group = $request->group?Group::find($request->group):null;
@@ -31,7 +35,8 @@ class TeachersController extends Controller
             'subjects'=>$subjects,
             'groups'=>$groups,
             'group_show'=>$group,
-            'subject_show'=>$subject
+            'subject_show'=>$subject,
+            'tests'=>$tests
         ]);
     }
 

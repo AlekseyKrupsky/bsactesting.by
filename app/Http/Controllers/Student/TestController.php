@@ -22,10 +22,18 @@ class TestController extends Controller
 
     public function index()
     {
-        $tests = Test::where('status','ready')->get();
-        $std_ans = StdAnswer::whereIn('test_id',$tests->pluck('id')->toArray())->get();
-       // dump($std_ans);
-        return view('student.tests',['tests'=>$tests,'std_ans'=>$std_ans]);
+        $std_ans = Auth::user()->stdanswers->where('mark','!=',null)->pluck('test_id')->toArray();
+
+        $tests = Test::whereIn('id',$std_ans)->orWhere('status','ready')->get();
+//        dump($tests);
+
+
+//        dump($std_ans);
+
+
+//        $std_ans = StdAnswer::where('user_id',Auth::user()->id)->get();
+//        dump($std_ans);
+        return view('student.tests',['tests'=>$tests]);
     }
     
     public function show($id)
@@ -36,7 +44,7 @@ class TestController extends Controller
         $is_complete = $test->isComplete();
 //      dd($is_complete);
         if($is_complete==-1) return $this->result($id);
-
+        if($is_complete==-2) return redirect(route('show_tests'));
 
         elseif($is_complete==1) {
           // echo 1;

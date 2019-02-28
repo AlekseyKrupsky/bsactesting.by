@@ -1,5 +1,4 @@
 @extends('layouts.app')
-
 @section('content')
 
     <div class="container">
@@ -9,21 +8,27 @@
                 <div class="col-md-12">
                 <h2>Страница преподавателя</h2>
                 </div>
+
+                <div class="col-md-12">
+
+                    {{--<example data="123"></example>--}}
+
+                </div>
+
                 <div class="col-md-6">
                 <h3>Выберите предмет</h3>
                     <div class="form-group">
                 @foreach($subjects as $subject)
-                            <input type="radio" id="s{{$subject->id}}" name="subject" class="check"
-                                   value="{{$subject->id}}" @if((!empty($subject_show) && $subject->id==$subject_show->id) || $loop->index==0) checked @endif>
-                            <label for="s{{$subject->id}}" class="alert alert-danger test-answer">
-                                {{$subject->name}}
-                            </label>
+                       <input type="radio" id="s{{$subject->id}}" name="subject" class="check"
+                            value="{{$subject->id}}" @if((!empty($subject_show) && $subject->id==$subject_show->id) || $loop->index==0) checked @endif>
+                       <label for="s{{$subject->id}}" class="alert alert-danger test-answer">
+                            {{$subject->name}}
+                       </label>
                 @endforeach
                     </div>
                 </div>
                 <div class="col-md-6">
                     <h3>Выберите группу</h3>
-
                         <select name="group" id=""  class="form-control">
                 @foreach($groups as $group)
                                 <option  class="form-control" value="{{$group->id}}" @if(!empty($group_show) && $group->id==$group_show->id)selected @endif>{{$group->name}}</option>
@@ -57,11 +62,12 @@
                     <td>{{$user->name}}</td>
                     @foreach($subject_show->tests as $test)
                         <td>
-                            @if($user->stdanswers->where('test_id',$test->id)->last())
-                            {{$user->stdanswers->where('test_id',$test->id)->last()->mark?
-                            $user->stdanswers->where('test_id',$test->id)->last()->mark:
-                            'Сдает'
-                            }}
+                            @if($test->isComplete($user->id)==-2)
+                                Результат не отправлен
+                                @elseif($test->isComplete($user->id)==-1)
+                                    Сдает
+                                @elseif($test->isComplete($user->id)==0)
+                                {{$user->stdanswers->where('test_id',$test->id)->last()->mark}}
                                 @endif
                         </td>
                     @endforeach

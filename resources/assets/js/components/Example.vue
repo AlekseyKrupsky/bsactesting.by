@@ -8,6 +8,7 @@
                     <div class="panel-body">
                         I'm an example component!
                     </div>
+                    <button @click="myMethod()">Click</button>
                 </div>
             </div>
         </div>
@@ -16,8 +17,18 @@
 
 <script>
     export default {
+        props:['data'],
         mounted() {
-            console.log('Component mounted.')
+            console.log('Component mounted.');
+        },
+        methods:{
+            myMethod() {
+                axios.post('/api/test').then(response => {
+                    console.log(response);
+                    console.log(this.data);
+            })
+            }
+
         }
     }
 </script>

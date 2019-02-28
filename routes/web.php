@@ -22,6 +22,8 @@ Route::prefix('admin')->middleware(['auth','onlyAdmin'])->group(function () {
     Route::get('/new_users', 'Admin\UserController@new_users')->name('new_users');
     Route::patch('/new_users/{id}', 'Admin\UserController@update')->name('new_users_update');
     Route::delete('/new_users/{id}', 'Admin\UserController@delete')->name('new_users_delete');
+    Route::get('/reset','Admin\UserController@reset')->name('reset_password');
+
 
     Route::get('/groups', 'Admin\GroupController@index')->name('groups');
     Route::post('/groups', 'Admin\GroupController@store');

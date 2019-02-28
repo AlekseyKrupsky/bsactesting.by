@@ -18,8 +18,19 @@ class QuestionController extends Controller
 
     public function store(Request $request, $id)
     {
-       $quest_id = Test::find($id)->addQuestion($request->name,$request->cost);
-        Question::find($quest_id)->addAnswer($request->except(['name','rightAnswer','_token','cost']),$request->rightAnswer);
+        $quest_id = Test::find($id)->addQuestion($request->name,$request->cost);
+        $question = Question::find($quest_id);
+        $question->addAnswer($request->except(['name','rightAnswer','_token','cost','image']),$request->rightAnswer);
+
+//        dump($request->all());
+        if($request->image)
+        {
+            $image = time().'_'.uniqid().'_'.$request->image->getClientOriginalName();
+            $request->image->move(public_path('img/questions'), $image);
+            $question->addImage('img/questions/'.$image);
+        }
+
+
 //        dump($request->rightAnswer);
         return back();
     }

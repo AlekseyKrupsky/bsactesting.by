@@ -6,6 +6,7 @@ use App\Model\Group;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\User;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -34,5 +35,45 @@ class UserController extends Controller
         User::find($id)->delete();
         return back();
     }
-    
+
+    public function reset()
+    {
+        return view('reset');
+    }
+
+
+    public function search(Request $request)
+    {
+       $users =  User::where('name','like','%'.$request->name.'%')->
+        where('email','like','%'.$request->email.'%')->get();
+
+        return $users;
+    }
+
+
+    public function updatePassword(Request $request)
+    {
+
+//        return $request->pass;
+
+        $this->validate($request, [
+            'id'=>'required',
+            'pass'=>'required|min:6'
+        ]);
+
+
+
+        $user = User::find($request->id);
+        $user->password = Hash::make($request->pass);
+        $user->save();
+        return response()->json(['message'=>'Пароль успешно изменен'],200);
+//        return response()->json(['message'=>'asd'],422);
+
+//        $request->validate([
+//
+//        ]);
+//
+//        return 123;
+
+    }
 }

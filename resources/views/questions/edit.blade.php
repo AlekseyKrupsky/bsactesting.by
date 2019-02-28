@@ -4,7 +4,7 @@
 
     <div class="container">
 
-        <form action="{{route('question_edit',$question->id)}}" method="post">
+        <form action="{{route('question_edit',$question->id)}}" method="post" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-md-12">
                     <h3>Обновить вопрос для теста "{{$question->test->name}}"</h3>
@@ -25,6 +25,12 @@
                         </div>
                     </div>
                 @endif
+                <div class="form-group">
+                    <label for="image" class="col-md-4 control-label">Изображение</label>
+                    <div class="col-md-8">
+                        <input type="file" name="image" id="file">
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
