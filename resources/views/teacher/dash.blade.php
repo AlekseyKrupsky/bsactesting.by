@@ -64,9 +64,9 @@
                         <td>
                             @if($test->isComplete($user->id)==-2)
                                 Результат не отправлен
-                                @elseif($test->isComplete($user->id)==-1)
-                                    Сдает
                                 @elseif($test->isComplete($user->id)==0)
+                                    Сдает
+                                @elseif($test->isComplete($user->id)==-1)
                                 {{$user->stdanswers->where('test_id',$test->id)->last()->mark}}
                                 @endif
                         </td>
