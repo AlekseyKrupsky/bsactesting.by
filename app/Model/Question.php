@@ -3,6 +3,8 @@
 namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Model\Image;
+use App\Helpers\Helper;
 
 class Question extends Model
 {
@@ -30,25 +32,33 @@ class Question extends Model
         return $this->belongsTo('App\Model\Test');
     }
 
-    public function addAnswer($answers,$right)
+    public function addAnswer($answers)
     {
-        foreach ($answers as $key => $value) {
-            if(in_array($key,$right)) {
-                $this->answers()->create(['text'=>$value,'correct'=>true]);
+        foreach ($answers as $answer) {
+            if($answer['correct']==1) {
+              $answer_model = $this->answers()->create(['text'=>$answer['ans'],'correct'=>true]);
             }
-           else $this->answers()->create(['text'=>$value,'correct'=>false]);
+           else $answer_model = $this->answers()->create(['text'=>$answer['ans'],'correct'=>false]);
 
+            if($answer['file'])
+            {
+                $name = Helper::filename($answer['file'],'img/answers/');
+                $answer_model->addImage($name);
+            }
+
+//            $answer->addImage()
         }
     }
 
     public function images()
     {
-        return $this->hasMany('App\Model\Image');
+        return Image::where('model','question')->where('model_id',$this->id);
     }
 
     public function addImage($path)
     {
-        $this->images()->create(['path'=>$path]);
+
+        Image::create(['path'=>$path,'model'=>'question','model_id'=>$this->id]);
     }
 
 }

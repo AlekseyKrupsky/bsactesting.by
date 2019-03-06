@@ -16,8 +16,8 @@ class QuestImageTable extends Migration
         Schema::create('question_images', function (Blueprint $table) {
             $table->increments('id');
             $table->string('path');
-            $table->integer('question_id')->unsigned();
-            $table->foreign('question_id')->references('id')->on('questions');
+            $table->integer('model_id')->unsigned();
+            $table->enum('model',['question','answer','subject','user']);
             $table->timestamps();
         });
     }

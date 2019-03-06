@@ -11,9 +11,8 @@
     </div>
 </template>
 
-<script>
+<script type="text/babel">
     export default {
-        components:['alert'],
         data() {
             return {
                 name: '',

@@ -7,10 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Image extends Model
 {
     //
-    protected $fillable = ['path'];
+    protected $fillable = ['path','model','model_id'];
     protected $table = 'question_images';
-    public function question()
-    {
-        return $this->belongsTo('App\Model\Question');
-    }
 }

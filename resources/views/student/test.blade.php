@@ -27,12 +27,19 @@
 
                     <div class="form-group">
                         <h3>{{$question->text}}</h3>
-
+                        @foreach($question->images()->get() as $image)
+                            <img src="/{{$image->path}}" alt="" width="300">
+                        @endforeach
                         @foreach($question->answers->shuffle() as $answer)
                             <div class="col-md-12">
                                 <input type="checkbox" id="a{{$answer->id}}" name="{{md5($question->id)}}[]" class="check" value="{{$answer->id}}">
                                 <label for="a{{$answer->id}}" class="alert alert-danger test-answer">
                                     {{$answer->text}}
+
+                                    @foreach($answer->images()->get() as $image)
+                                        <img src="/{{$image->path}}" alt="" width="300">
+                                    @endforeach
+
                                 </label>
                             </div>
                         @endforeach

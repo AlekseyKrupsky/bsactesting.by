@@ -42,12 +42,12 @@ class TestController extends Controller
         $test = Test::find($id);
         //$std_ans = Auth::user()->stdanswers->where('mark','')->where('test_id',$id);
         $is_complete = $test->isComplete();
-//      dd($is_complete);
+
         if($is_complete==-1) return $this->result($id);
         if($is_complete==-2) return redirect(route('show_tests'));
 
         elseif($is_complete==1) {
-          // echo 1;
+
             if($test->mark_system=='simple') {
                 $questions = $test->questions->random($test->quest_number);
             }
