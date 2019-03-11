@@ -43,7 +43,7 @@
             <div class="form-group">
                 <div class="col-md-6">
                     <button @click="addQuestion" class="btn btn-success">Добавить вопрос</button>
-                    <!--<a class="btn btn-success" href="{{route('tests_edit',$test->id)}}">Настройки теста</a>-->
+                    <a class="btn btn-success" :href="test_route">Настройки теста</a>
 
                 </div>
             </div>
@@ -53,7 +53,11 @@
 
 <script type="text/babel">
     export default {
-        props:['test','route'],
+        props:[
+            'test',
+            'route',
+            'test_route'
+        ],
         data() {
             return {
                 test_array:[],
@@ -76,15 +80,15 @@
                   {
                      id:0,
                      correct:1,
-                     ans:'',
-                     image:'',
+                     text:'',
+                     path:'',
                      file:''
                   },
               {
                   id:1,
                   correct:0,
-                  ans:'',
-                  image:'',
+                  text:'',
+                  path:'',
                   file:''
               }
           );
@@ -95,8 +99,8 @@
                     {
                         id:this.ansId,
                         correct:0,
-                        ans:'',
-                        image:'',
+                        text:'',
+                        path:'',
                         file:''
                     }
                 );
@@ -109,10 +113,11 @@
                     if(value.id===id) {
                         // console.log(id);
                         value.id=id;
-                        value.correct=data.checked;
-                        value.ans=data.ans;
-                        value.image=data.image_path;
-                        value.file = data.file;
+                        value.correct=data.correct;
+                        value.text=data.text;
+                        value.path=data.path;
+                        value.file=data.file;
+
                     }
 
                     return value;
@@ -138,7 +143,7 @@
 
                 for(let i=0;i<this.answers.length;i++) {
                     let answer = this.answers[i];
-                    formData.append('answer['+answer.id+'][ans]',answer.ans);
+                    formData.append('answer['+answer.id+'][text]',answer.text);
                     formData.append('answer['+answer.id+'][correct]',answer.correct);
                     formData.append('answer['+answer.id+'][file]',answer.file);
                 }
@@ -150,6 +155,7 @@
                         'Content-Type': 'multipart/form-data',
                 }}
                 ).then(response => {
+                    console.log(response);
                         this.$emit('showmessage',{messages:[response.data],type:'success'});
                         this.$emit('update');
                 }).catch(error => {

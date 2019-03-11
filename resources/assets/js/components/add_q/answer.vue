@@ -1,7 +1,7 @@
 <template>
     <div class="form-group answer">
         <div class="col-md-4">
-            <input type="checkbox"  class="check" name="rightAnswer[]" value="a1" v-model="checked">
+            <input type="checkbox"  class="check" name="rightAnswer[]" value="a1" v-model="correct">
             <label  class="control-label btn btn-danger" @click="click">
                 Правильный
             </label>
@@ -18,7 +18,7 @@
                       v-on:input="changeAnswer"></textarea>
 
         </div>
-        <image_for_question @select_img="select_img" v-model="image_path"></image_for_question>
+        <image_for_question :image_path="path" @select_img="select_img" v-model="path"></image_for_question>
     </div>
 </template>
 
@@ -27,20 +27,20 @@
         props:['answer'],
         data() {
             return {
-                checked:this.answer.correct,
-                text:this.answer.ans,
-                image_path:this.answer.image,
+                correct:this.answer.correct,
+                text:this.answer.text,
+                path:this.answer.path,
                 id:this.answer.id,
                 file:''
             }
         },
         methods: {
             click () {
-                this.checked?this.checked=0:this.checked=1;
+                this.correct?this.correct=0:this.correct=1;
                 this.changeAnswer();
             },
             select_img(data) {
-                this.image_path = data.path;
+                this.path = data.path;
                 this.file = data.file;
                 this.changeAnswer();
             },
@@ -52,10 +52,10 @@
             },
             changeAnswer() {
                 this.$emit('changeAns', {
-                    ans:this.text,
+                    text:this.text,
                     id:this.id,
-                    checked:this.checked,
-                    image_path:this.image_path,
+                    correct:this.correct,
+                    path:this.path,
                     file:this.file
                 })
             }

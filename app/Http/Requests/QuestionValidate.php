@@ -26,7 +26,7 @@ class QuestionValidate extends FormRequest
         return [
             'question'=>'required|max:255',
 //            'question'=>'required|unique:questions,text|max:255',
-            'answer.*.ans'=>'required|bail|max:255',
+            'answer.*.text'=>'required|bail|max:255',
             'answer.*.file'=>'nullable|image',
             'image'=>'nullable|image',
 //            'answer.correct'=>'required'
@@ -37,10 +37,10 @@ class QuestionValidate extends FormRequest
     public function messages()
     {
         return [
-          'question.required' => 'Поле "вопрос" обязательно для заполнения',
+            'question.required' => 'Поле "вопрос" обязательно для заполнения',
 //          'question.unique' => 'Такой вопрос уже существует',
             'image'=>'Загружаемые файлы должны быть изображениями',
-          'answer.*.ans.required' => 'Поле "текст ответа" обязательно для заполнения',
+            'answer.*.text.required' => 'Поле "текст ответа" обязательно для заполнения',
 //          'correct.required' => 'Хотя бы один ответ должен быть верным',
         ];
     }

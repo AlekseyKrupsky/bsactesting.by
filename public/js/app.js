@@ -1072,7 +1072,7 @@ module.exports = Cancel;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(11);
-module.exports = __webpack_require__(69);
+module.exports = __webpack_require__(72);
 
 
 /***/ }),
@@ -1102,9 +1102,10 @@ Vue.component('userinfo', __webpack_require__(46));
 Vue.component('alert', __webpack_require__(49));
 
 Vue.component('addquestion', __webpack_require__(52));
-Vue.component('markcost', __webpack_require__(55));
-Vue.component('image_for_question', __webpack_require__(58));
-Vue.component('answer', __webpack_require__(66));
+Vue.component('editquestion', __webpack_require__(55));
+Vue.component('markcost', __webpack_require__(58));
+Vue.component('image_for_question', __webpack_require__(61));
+Vue.component('answer', __webpack_require__(69));
 
 var app = new Vue({
     el: '#app',
@@ -44509,7 +44510,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this = this;
 
             axios.post('/api/user/search', { name: this.name, email: this.email }).then(function (response) {
+
                 _this.users = response.data;
+                // this.users.splice(0,this.users.length);
+                // for(let item in response.data) {
+                //     this.users.push({
+                //         name:response.data[item].name,
+                //         email:response.data[item].email,
+                //     })
+                // }
+                _this.users.splice(_this.users.length, 0);
             });
         },
         onResponse: function onResponse(data) {
@@ -45004,7 +45014,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['test', 'route'],
+    props: ['test', 'route', 'test_route'],
     data: function data() {
         return {
             test_array: [],
@@ -45025,14 +45035,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.answers.push({
             id: 0,
             correct: 1,
-            ans: '',
-            image: '',
+            text: '',
+            path: '',
             file: ''
         }, {
             id: 1,
             correct: 0,
-            ans: '',
-            image: '',
+            text: '',
+            path: '',
             file: ''
         });
     },
@@ -45042,8 +45052,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.answers.push({
                 id: this.ansId,
                 correct: 0,
-                ans: '',
-                image: '',
+                text: '',
+                path: '',
                 file: ''
             });
             this.ansId++;
@@ -45055,9 +45065,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 if (value.id === id) {
                     // console.log(id);
                     value.id = id;
-                    value.correct = data.checked;
-                    value.ans = data.ans;
-                    value.image = data.image_path;
+                    value.correct = data.correct;
+                    value.text = data.text;
+                    value.path = data.path;
                     value.file = data.file;
                 }
 
@@ -45086,7 +45096,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             for (var i = 0; i < this.answers.length; i++) {
                 var answer = this.answers[i];
-                formData.append('answer[' + answer.id + '][ans]', answer.ans);
+                formData.append('answer[' + answer.id + '][text]', answer.text);
                 formData.append('answer[' + answer.id + '][correct]', answer.correct);
                 formData.append('answer[' + answer.id + '][file]', answer.file);
             }
@@ -45097,6 +45107,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             axios.post(this.route, formData, { headers: {
                     'Content-Type': 'multipart/form-data'
                 } }).then(function (response) {
+                console.log(response);
                 _this.$emit('showmessage', { messages: [response.data], type: 'success' });
                 _this.$emit('update');
             }).catch(function (error) {
@@ -45222,6 +45233,12 @@ var render = function() {
             "button",
             { staticClass: "btn btn-success", on: { click: _vm.addQuestion } },
             [_vm._v("Добавить вопрос")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            { staticClass: "btn btn-success", attrs: { href: _vm.test_route } },
+            [_vm._v("Настройки теста")]
           )
         ])
       ])
@@ -45275,7 +45292,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/assets/js/components/add_q/mark_cost.vue"
+Component.options.__file = "resources/assets/js/components/EditQuestion.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -45284,9 +45301,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-53e71cfc", Component.options)
+    hotAPI.createRecord("data-v-55d82472", Component.options)
   } else {
-    hotAPI.reload("data-v-53e71cfc", Component.options)
+    hotAPI.reload("data-v-55d82472", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -45312,13 +45329,375 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['question_p', 'question_image', 'answers_p', 'route', 'test_route'],
+    data: function data() {
+        return {
+            question: '',
+            name: '',
+            system: '',
+            cost: 1,
+            answers: [],
+            ansId: 2,
+            question_array: '',
+            image_path: this.question_image,
+            file: ''
+        };
+    },
+    mounted: function mounted() {
+        // this.test_array = JSON.parse(this.test);
+        this.question_array = JSON.parse(this.question_p);
+        this.cost = this.question_array.cost;
+        this.question = this.question_array.text;
+        this.system = this.question_array.mark_system;
+        this.name = this.question_array.name;
+        this.answers = JSON.parse(this.answers_p);
+        this.answers.forEach(function (item) {
+            item.file = '';
+            item.new = 0;
+            return item;
+        });
+    },
+
+    methods: {
+        addAnswer: function addAnswer() {
+            this.answers.push({
+                id: this.ansId,
+                correct: 0,
+                text: '',
+                path: '',
+                file: '',
+                new: 1
+            });
+            this.ansId++;
+            // console.log(this.answers)
+        },
+        changeAnswer: function changeAnswer(data) {
+            var id = data.id;
+            this.answers = this.answers.filter(function (value) {
+                if (value.id === id) {
+                    // console.log(id);
+                    value.id = id;
+                    value.correct = data.correct;
+                    value.text = data.text;
+                    value.path = data.path;
+                    value.file = data.file;
+                }
+
+                return value;
+            });
+            // console.log(this.answers);
+        },
+        deleteAnswer: function deleteAnswer(data) {
+            var id = data.id;
+            this.answers = this.answers.filter(function (value) {
+                if (value.id !== id) return value;
+            });
+        },
+        select_img: function select_img(data) {
+            this.image_path = data.path;
+            this.file = data.file;
+        },
+        addQuestion: function addQuestion() {
+            var _this = this;
+
+            var formData = new FormData();
+            // console.log(this.test_a)
+            formData.append('_method', 'PATCH');
+            formData.append('image', this.file);
+
+            formData.append('question', this.question);
+            formData.append('cost', this.cost);
+            if (this.image_path) formData.append('path', 1);else formData.append('path', '');
+
+            for (var i = 0; i < this.answers.length; i++) {
+                var answer = this.answers[i];
+                formData.append('answer[' + answer.id + '][text]', answer.text);
+                formData.append('answer[' + answer.id + '][correct]', answer.correct);
+                formData.append('answer[' + answer.id + '][file]', answer.file);
+                formData.append('answer[' + answer.id + '][new]', answer.new);
+                if (answer.path) formData.append('answer[' + answer.id + '][path]', 1);else formData.append('answer[' + answer.id + '][path]', '');
+            }
+            // console.log(this.answers);
+            // formData.append('data',123);
+            // console.log(formData);
+            // console.log(formData.getAll());
+
+            axios.post(this.route, formData, { headers: {
+                    'Content-Type': 'multipart/form-data'
+                } }).then(function (response) {
+                _this.$emit('showmessage', { messages: [response.data], type: 'success' });
+                _this.answers.forEach(function (item) {
+                    item.file = '';
+                    item.new = 0;
+                    return item;
+                });
+            }).catch(function (error) {
+                // console.log(error.response.data);
+
+                var messages = [];
+                for (var error_messages in error.response.data) {
+                    for (var _i = 0; _i < error.response.data[error_messages].length; _i++) {
+                        messages.push(error.response.data[error_messages][_i]);
+                    }
+                }
+                _this.$emit('showmessage', { messages: messages, type: 'error' });
+            });
+        }
+    }
+});
+
+/***/ }),
+/* 57 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c(
+      "div",
+      { staticClass: "row" },
+      [
+        _c("div", { staticClass: "col-md-12" }, [
+          _c("h3", [_vm._v('Изменить вопрос теста "' + _vm._s(_vm.name) + '"')])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group" }, [
+          _c("label", { staticClass: "col-md-4 control-label" }, [
+            _vm._v("Вопрос")
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-md-8" }, [
+            _c("textarea", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.question,
+                  expression: "question"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { required: "" },
+              domProps: { value: _vm.question },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.question = $event.target.value
+                }
+              }
+            })
+          ])
+        ]),
+        _vm._v(" "),
+        _vm.system == "difficult"
+          ? _c("markcost", {
+              model: {
+                value: _vm.cost,
+                callback: function($$v) {
+                  _vm.cost = $$v
+                },
+                expression: "cost"
+              }
+            })
+          : _vm._e(),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "form-group" },
+          [
+            _c("label", { staticClass: "col-md-4 control-label" }, [
+              _vm._v("Изображение")
+            ]),
+            _vm._v(" "),
+            _c("image_for_question", {
+              attrs: { image_path: _vm.image_path },
+              on: { select_img: _vm.select_img }
+            })
+          ],
+          1
+        )
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _vm._m(0),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "row answers d-flex flex-column" },
+      _vm._l(_vm.answers, function(answer, index) {
+        return _c("answer", {
+          key: answer.id,
+          attrs: { answer: answer },
+          on: { delete: _vm.deleteAnswer, changeAns: _vm.changeAnswer }
+        })
+      }),
+      1
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "row d-flex justify-content-center" }, [
+      _c("div", { staticClass: "col-md-6" }, [
+        _c(
+          "button",
+          { staticClass: "btn btn-info", on: { click: _vm.addAnswer } },
+          [_vm._v("Добавить ответ")]
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "form-group" }, [
+        _c("div", { staticClass: "col-md-6" }, [
+          _c(
+            "button",
+            { staticClass: "btn btn-success", on: { click: _vm.addQuestion } },
+            [_vm._v("Обновить вопрос")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            { staticClass: "btn btn-success", attrs: { href: _vm.test_route } },
+            [_vm._v("Настройки теста")]
+          )
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-12" }, [
+        _c("h3", [_vm._v("Варианты ответов")])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-55d82472", module.exports)
+  }
+}
+
+/***/ }),
+/* 58 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(59)
+/* template */
+var __vue_template__ = __webpack_require__(60)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/add_q/mark_cost.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-53e71cfc", Component.options)
+  } else {
+    hotAPI.reload("data-v-53e71cfc", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 59 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['value']
 });
 
 /***/ }),
-/* 57 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -45357,19 +45736,19 @@ if (false) {
 }
 
 /***/ }),
-/* 58 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(59)
+  __webpack_require__(62)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(64)
+var __vue_script__ = __webpack_require__(67)
 /* template */
-var __vue_template__ = __webpack_require__(65)
+var __vue_template__ = __webpack_require__(68)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -45408,17 +45787,17 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 59 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(60);
+var content = __webpack_require__(63);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(62)("4fd0dcb1", content, false, {});
+var update = __webpack_require__(65)("4fd0dcb1", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -45434,10 +45813,10 @@ if(false) {
 }
 
 /***/ }),
-/* 60 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(61)(false);
+exports = module.exports = __webpack_require__(64)(false);
 // imports
 
 
@@ -45448,7 +45827,7 @@ exports.push([module.i, "\nimg {\n    width:100px;\n}\n", ""]);
 
 
 /***/ }),
-/* 61 */
+/* 64 */
 /***/ (function(module, exports) {
 
 /*
@@ -45530,7 +45909,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 62 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -45549,7 +45928,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(63)
+var listToStyles = __webpack_require__(66)
 
 /*
 type StyleObject = {
@@ -45758,7 +46137,7 @@ function applyToTag (styleElement, obj) {
 
 
 /***/ }),
-/* 63 */
+/* 66 */
 /***/ (function(module, exports) {
 
 /**
@@ -45791,7 +46170,7 @@ module.exports = function listToStyles (parentId, list) {
 
 
 /***/ }),
-/* 64 */
+/* 67 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -45851,7 +46230,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 65 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -45894,15 +46273,15 @@ if (false) {
 }
 
 /***/ }),
-/* 66 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(67)
+var __vue_script__ = __webpack_require__(70)
 /* template */
-var __vue_template__ = __webpack_require__(68)
+var __vue_template__ = __webpack_require__(71)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -45941,7 +46320,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 67 */
+/* 70 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -45975,9 +46354,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     props: ['answer'],
     data: function data() {
         return {
-            checked: this.answer.correct,
-            text: this.answer.ans,
-            image_path: this.answer.image,
+            correct: this.answer.correct,
+            text: this.answer.text,
+            path: this.answer.path,
             id: this.answer.id,
             file: ''
         };
@@ -45985,11 +46364,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     methods: {
         click: function click() {
-            this.checked ? this.checked = 0 : this.checked = 1;
+            this.correct ? this.correct = 0 : this.correct = 1;
             this.changeAnswer();
         },
         select_img: function select_img(data) {
-            this.image_path = data.path;
+            this.path = data.path;
             this.file = data.file;
             this.changeAnswer();
         },
@@ -46000,10 +46379,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         changeAnswer: function changeAnswer() {
             this.$emit('changeAns', {
-                ans: this.text,
+                text: this.text,
                 id: this.id,
-                checked: this.checked,
-                image_path: this.image_path,
+                correct: this.correct,
+                path: this.path,
                 file: this.file
             });
         }
@@ -46011,7 +46390,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 68 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -46028,33 +46407,33 @@ var render = function() {
             {
               name: "model",
               rawName: "v-model",
-              value: _vm.checked,
-              expression: "checked"
+              value: _vm.correct,
+              expression: "correct"
             }
           ],
           staticClass: "check",
           attrs: { type: "checkbox", name: "rightAnswer[]", value: "a1" },
           domProps: {
-            checked: Array.isArray(_vm.checked)
-              ? _vm._i(_vm.checked, "a1") > -1
-              : _vm.checked
+            checked: Array.isArray(_vm.correct)
+              ? _vm._i(_vm.correct, "a1") > -1
+              : _vm.correct
           },
           on: {
             change: function($event) {
-              var $$a = _vm.checked,
+              var $$a = _vm.correct,
                 $$el = $event.target,
                 $$c = $$el.checked ? true : false
               if (Array.isArray($$a)) {
                 var $$v = "a1",
                   $$i = _vm._i($$a, $$v)
                 if ($$el.checked) {
-                  $$i < 0 && (_vm.checked = $$a.concat([$$v]))
+                  $$i < 0 && (_vm.correct = $$a.concat([$$v]))
                 } else {
                   $$i > -1 &&
-                    (_vm.checked = $$a.slice(0, $$i).concat($$a.slice($$i + 1)))
+                    (_vm.correct = $$a.slice(0, $$i).concat($$a.slice($$i + 1)))
                 }
               } else {
-                _vm.checked = $$c
+                _vm.correct = $$c
               }
             }
           }
@@ -46113,13 +46492,14 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("image_for_question", {
+        attrs: { image_path: _vm.path },
         on: { select_img: _vm.select_img },
         model: {
-          value: _vm.image_path,
+          value: _vm.path,
           callback: function($$v) {
-            _vm.image_path = $$v
+            _vm.path = $$v
           },
-          expression: "image_path"
+          expression: "path"
         }
       })
     ],
@@ -46137,7 +46517,7 @@ if (false) {
 }
 
 /***/ }),
-/* 69 */
+/* 72 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

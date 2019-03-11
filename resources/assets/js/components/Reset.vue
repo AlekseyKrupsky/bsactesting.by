@@ -19,13 +19,22 @@
                 email:'',
                 users:[],
                 message:[],
-                type:''
+                type:'',
             }
         },
         methods:{
             search() {
                 axios.post('/api/user/search',{name:this.name,email:this.email}).then(response => {
+
                     this.users = response.data;
+                    // this.users.splice(0,this.users.length);
+                    // for(let item in response.data) {
+                    //     this.users.push({
+                    //         name:response.data[item].name,
+                    //         email:response.data[item].email,
+                    //     })
+                    // }
+                    this.users.splice(this.users.length,0);
             })
             },
             onResponse(data) {

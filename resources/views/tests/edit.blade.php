@@ -142,7 +142,7 @@
                 <button class="btn btn-danger">Удалить тест</button></form>
             <div class="row">
                 <div class="col-md-12">
-                    <h3>Список вопросов и ответов</h3>
+                    <h3>Список вопросов и ответов ({{$questions->count()}})</h3>
                 </div>
                 @forelse($questions as $question)
                     <div class="col-md-12 question-admin">

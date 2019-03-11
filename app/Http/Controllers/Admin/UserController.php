@@ -45,7 +45,9 @@ class UserController extends Controller
     public function search(Request $request)
     {
        $users =  User::where('name','like','%'.$request->name.'%')->
-        where('email','like','%'.$request->email.'%')->get();
+        where('email','like','%'.$request->email.'%')
+           ->select('name','email')
+           ->get();
 
         return $users;
     }
