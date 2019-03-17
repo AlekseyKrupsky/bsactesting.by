@@ -6,11 +6,16 @@
         <div class="row">
             <form action="{{route('subjects')}}" method="post">
                 {{csrf_field()}}
-                <input type="text" name="name" placeholder="Математика">
+                <input type="text" name="name" placeholder="Математика" required>
                 <input class="btn btn-primary"  type="submit" value="Добавить предмет">
             </form>
         </div>
 
+        @include('validerror')
+
+        @foreach($errors->all() as $error)
+            {{$error}}
+        @endforeach
         <h3>Список предметов:</h3>
         @forelse($subjects as $subject)
             <div class="row d-flex flex-row">

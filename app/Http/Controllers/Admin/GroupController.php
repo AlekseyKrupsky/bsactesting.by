@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Model\Group;
 use App\User;
+use App\Http\Requests\GroupValidation;
 
 class GroupController extends Controller
 {
@@ -19,16 +20,9 @@ class GroupController extends Controller
     public function index()
     {
         //
-    $groups = Group::all();
-
-    $users = User::whereIn('group_id',$groups->pluck('id')->toArray())->orderBy('name')->get();
-//    dump($users);
-//        dump($users->where('group_id',5));
-//        foreach ($groups as $group) {
-//            if($group->headman)
-//            dump($group->headmanUser->name);
-//    }
-        return view('group',['groups'=>$groups,'users'=>$users]);
+        $groups = Group::all();
+        $users = User::whereIn('group_id',$groups->pluck('id')->toArray())->orderBy('name')->get();
+        return view('admin.group',['groups'=>$groups,'users'=>$users]);
     }
 
     /**
@@ -48,7 +42,7 @@ class GroupController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(GroupValidation $request)
     {
         //
 
@@ -92,6 +86,16 @@ class GroupController extends Controller
      */
     public function update(Request $request, $id)
     {
+
+        $this->validate($request,[
+            'name'=>'required|max:255|unique:groups,name,'.$id
+        ],
+            [
+                'required'=>'Название группы обязательно к заполнению',
+                'max'=>'Длина названия группы не должно превышать 255 символов',
+                'unique'=>'Название группы должно быть уникальным',
+            ]);
+
         Group::find($id)->update($request->all());
         return back();
     }

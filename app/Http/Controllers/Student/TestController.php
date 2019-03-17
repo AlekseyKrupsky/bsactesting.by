@@ -27,6 +27,12 @@ class TestController extends Controller
         $tests = Test::whereIn('id',$std_ans)->orWhere('status','ready')->get();
 //        dump($tests);
 
+        foreach ($tests as $test) {
+            $test->isComplete = $test->isComplete();
+        }
+
+//        dump(StdAnswer::whereNull('mark')->get());
+//        dump(StdAnswer::whereNotNull('mark')->get());
 
 //        dump($std_ans);
 
@@ -74,30 +80,33 @@ class TestController extends Controller
 
     public function check(Request $request)
     {
-
         $test = Test::find($request->test);
         $qus = unserialize(StdAnswer::find(base64_decode($request->stdans))->answer);
+
         $total_mark = 0;
         $stdAns = [];
         foreach ($qus as $question) {
             //dump($item->id);
-            $myans = $request->all()[md5($question->id)];
-            //dump($myans);
-            $uncorrect = $question->isNotCorrect($myans);
-           // dump($uncorrect);
-            $mark = 0;
+            $myans = $request->{md5($question->id)};
+            if($myans) {
+                //dump($myans);
+                $uncorrect = $question->isNotCorrect($myans);
+                // dump($uncorrect);
+                $mark = 0;
 
-            $stdAns[$question->id] = $myans;
+                $stdAns[$question->id] = $myans;
 
-            if(!$uncorrect) {
-                $correctArray = $question->correct()->pluck('id')->toArray();
-                $count = count($correctArray);
-                $inter_count = count(array_intersect($myans,$correctArray));
-                if($test->mark_system=='difficult')
-                $mark = $inter_count/$count*$question->cost;
-                else $mark = $inter_count/$count;
+                if(!$uncorrect) {
+                    $correctArray = $question->correct()->pluck('id')->toArray();
+                    $count = count($correctArray);
+                    $inter_count = count(array_intersect($myans,$correctArray));
+                    if($test->mark_system=='difficult')
+                        $mark = $inter_count/$count*$question->cost;
+                    else $mark = $inter_count/$count;
+                }
+                $total_mark+=$mark;
             }
-            $total_mark+=$mark;
+
         }
 
         if($test->mark_system=='difficult') {

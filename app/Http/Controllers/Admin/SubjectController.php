@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Model\Subject;
 use Psy\Sudo;
+use App\Http\Requests\SubjectValidation;
 
 class SubjectController extends Controller
 {
@@ -14,11 +15,12 @@ class SubjectController extends Controller
     public function index()
     {
         $subjects = Subject::all();
-        return view('subject',['subjects'=>$subjects]);
+        return view('admin.subject',['subjects'=>$subjects]);
     }
 
-    public function store(Request $request)
+    public function store(SubjectValidation $request)
     {
+
        Subject::create($request->all());
        return back();
     }

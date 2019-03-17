@@ -141,6 +141,9 @@
                 {{method_field('delete')}}
                 <button class="btn btn-danger">Удалить тест</button></form>
             <div class="row">
+                @if($questions->count()<$test->quest_number)
+                <div class="col-md-12 alert alert-warning">Недостаточно вопросов. Необходимо добавить минимум <b>  {{$test->quest_number-$questions->count()}}</b></div>
+                @endif
                 <div class="col-md-12">
                     <h3>Список вопросов и ответов ({{$questions->count()}})</h3>
                 </div>
@@ -172,15 +175,9 @@
                     </div>
 
                 @empty
-
-                    @if($test->mark_system!='difficult')
-                        <div class="col-md-12 alert alert-warning">Пока нет ни одного вопроса. Необходимо добавить минимум <b>  {{$test->quest_number}}</b></div>
-                    @else
                         @if(!empty($question_info))
                         {{array_sum($question_info)}}
                         @endif
-                    @endif
-
                 @endforelse
             </div>
         @else

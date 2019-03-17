@@ -25,10 +25,10 @@ class TeachersController extends Controller
 //        dump($tests);
 
         $groups = Group::all();
-    if($request){
-        $group = $request->group?Group::find($request->group):null;
-        $subject = $request->subject?Subject::find($request->subject):null;
-    }
+        if($request){
+            $group = $request->group?Group::find($request->group):null;
+            $subject = $request->subject?Subject::find($request->subject):null;
+        }
 
 
         return view('teacher.dash',[

@@ -5,7 +5,7 @@ namespace App\Model;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 
 class Test extends Model
 {
@@ -35,34 +35,30 @@ class Test extends Model
 
         $user_id?true:$user_id=\Auth::user()->id;
 
-        //dump($std_ans);
+            $this->stdanswers()->where('user_id',$user_id);
 
-        //dump($this->stdanswers->where('mark','')->where('user_id',$user->id));
 
-        //dump($this->stdanswers->where('user_id',\Auth::user()->id));
+        $marks = range(0,10);
 
-        $user_answer = $this->stdanswers->where('user_id',$user_id);
 
-        if(!$user_answer->count()) {
+        if(!$this->stdanswers()->where('user_id',$user_id)->get()->count()) {
             return 1;//'Пройти'; //Пусто
         }
 
-        else if($user_answer->where('mark','')->count()
-            && time()-$user_answer->last()->created_at->timestamp>$this->time*60) {
-            return -2;// Не отправил результат
+        else if($this->stdanswers()->where('user_id',$user_id)->whereNull('mark')->get()->count()
+            && time()-$this->stdanswers()->where('user_id',$user_id)->get()->last()->created_at->timestamp>$this->time*60) {
 
+            return -2;// Не отправил результат
         }
 
-        else if($user_answer->where('mark','')->count()) {
-
+        else if($this->stdanswers()->where('user_id',$user_id)->whereNull('mark')->get()->last()) {
             return 0;//'Продолжить'; //Сдает
 
         }
 
-        else if(!$this->stdanswers->where('mark','')->where('user_id',$user_id)->count()){
+        else if($this->stdanswers->whereIn('mark',$marks)->where('user_id',$user_id)->count()){
             return -1;//'Сдан'; //Оценка
         }
-
 
 
     }

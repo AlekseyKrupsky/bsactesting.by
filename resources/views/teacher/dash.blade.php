@@ -63,11 +63,11 @@
                     @foreach($subject_show->tests as $test)
                         <td>
                             @if($test->isComplete($user->id)==-2)
-                                Результат не отправлен
+                                Результат не отправлен <a href="" class="btn btn-success">+</a>
                                 @elseif($test->isComplete($user->id)==0)
                                     Сдает
                                 @elseif($test->isComplete($user->id)==-1)
-                                {{$user->stdanswers->where('test_id',$test->id)->last()->mark}}
+                                {{$user->stdanswers->where('test_id',$test->id)->last()->mark}} <a title="Разрешить пересдать" href="" class="btn btn-success">+</a>
                                 @endif
                         </td>
                     @endforeach

@@ -5,10 +5,13 @@
         <div class="row">
             <form action="{{route('groups')}}" method="post">
                 {{csrf_field()}}
-                <input type="text" name="name" placeholder="СП741">
+                <input type="text" name="name" placeholder="СП741" required>
                 <input class="btn btn-primary"  type="submit" value="Добавить группу">
             </form>
         </div>
+
+        @include('validerror')
+
         <h3>Список добавленных групп:</h3>
 
             @foreach($groups as $group)
@@ -17,7 +20,7 @@
                         {{csrf_field()}}
                     <div class="col-md-3">
                         {{--{{$loop->index+1}}--}}
-                        <input type="text" class="form-control" name="name" value="{{$group->name}}">
+                        <input type="text" class="form-control" name="name" value="{{$group->name}}" >
                     </div>
                         <div class="col-md-6">
                         @if($users->where('group_id',$group->id)->count())

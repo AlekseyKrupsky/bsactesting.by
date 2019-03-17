@@ -15,16 +15,16 @@
                     {{$test->name}}
                     </div>
                     <div class="col-md-4">
-                        @if($test->isComplete()==1)
+                        @if($test->isComplete==1)
                         <a class="btn btn-primary" href="{{route('show_test',$test->id)}}">Пройти</a>
                         @endif
-                        @if($test->isComplete()==0)
+                        @if($test->isComplete==0)
                         <a class="btn btn-primary" href="{{route('show_test',$test->id)}}">Продолжить</a>
                         @endif
-                        @if($test->isComplete()==-1)
+                        @if($test->isComplete==-1)
                         <a class="btn btn-primary" href="{{route('show_test',$test->id)}}">Результат</a>
                         @endif
-                        @if($test->isComplete()==-2)
+                        @if($test->isComplete==-2)
                             <a class="btn btn-primary" href="" disabled>Результат не отправлен</a>
                         @endif
                     </div>
