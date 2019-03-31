@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Model\Group;
 use App\Model\Subject;
 use App\Model\Test;
+use App\Model\UserRetake;
+use App\User;
 
 class TeachersController extends Controller
 {
@@ -40,7 +42,11 @@ class TeachersController extends Controller
         ]);
     }
 
-
+    public function retake($test_id,$user_id)
+    {
+        User::find($user_id)->addRetake($test_id);
+        return back();
+    }
 
 
 }

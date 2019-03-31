@@ -54,15 +54,20 @@
         </form>
         <h3>Список тестов:</h3>
         @forelse($tests as $test)
-            <div class="row">
-                <div class="col-6 buttons">
-                    {{$loop->index+1}}.  {{$test->name}} ({{$test->subject->name}}) <a class="btn btn-primary" href="{{route('tests_edit',$test->id)}}">Редактировать</a>
+                <div class="mb-5 buttons space-between align-center tests-list">
+                    <div class="test-name">
+                    {{$loop->index+1}}.  {{$test->name}} ({{$test->subject->name}})
+                    </div>
+                    <div class="test-buttons">
+
+                    <a class="btn btn-primary" href="{{route('tests_edit',$test->id)}}">Редактировать</a>
                     <a class="btn btn-primary" href="{{route('question_add',$test->id)}}">Добавить вопрос</a>
                     <form class="delete" action="{{route('test_delete',$test->id)}}" method="post">
                         {{csrf_field()}}
                         {{method_field('delete')}}
-                        <button class="btn btn-danger">Удалить</button></form>
-                </div>
+                        <button class="btn btn-danger">Удалить</button>
+                    </form>
+                    </div>
             </div>
         @empty
             <p>Список пуст</p>

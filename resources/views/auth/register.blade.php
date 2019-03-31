@@ -68,7 +68,7 @@
                                     <option value="0">Преподаватель</option>
                                     @foreach($groups as $group)
                                         <option value="{{$group->id}}">{{$group->name}}</option>
-                                        @endforeach
+                                    @endforeach
                                 </select>
                             </div>
                         </div>

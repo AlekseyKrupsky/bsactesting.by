@@ -10,21 +10,19 @@
                 </div>
 
                 <div class="col-md-12">
-
                     {{--<example data="123"></example>--}}
-
                 </div>
 
                 <div class="col-md-6">
                 <h3>Выберите предмет</h3>
                     <div class="form-group">
-                @foreach($subjects as $subject)
-                       <input type="radio" id="s{{$subject->id}}" name="subject" class="check"
-                            value="{{$subject->id}}" @if((!empty($subject_show) && $subject->id==$subject_show->id) || $loop->index==0) checked @endif>
-                       <label for="s{{$subject->id}}" class="alert alert-danger test-answer">
-                            {{$subject->name}}
-                       </label>
-                @endforeach
+                        <select name="subject" class="form-control" id="">
+                        @foreach($subjects as $subject)
+                              <option class="form-control" value="{{$subject->id}}" @if((!empty($subject_show) && $subject->id==$subject_show->id) || $loop->index==0) selected @endif>
+                                  {{$subject->name}}
+                              </option>
+                        @endforeach
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -63,12 +61,19 @@
                     @foreach($subject_show->tests as $test)
                         <td>
                             @if($test->isComplete($user->id)==-2)
-                                Результат не отправлен <a href="" class="btn btn-success">+</a>
+                                {{\App\Helpers\Helper::marks($user,$test->id)}}
+                                <a href="" class="btn btn-success">+</a>
                                 @elseif($test->isComplete($user->id)==0)
                                     Сдает
                                 @elseif($test->isComplete($user->id)==-1)
-                                {{$user->stdanswers->where('test_id',$test->id)->last()->mark}} <a title="Разрешить пересдать" href="" class="btn btn-success">+</a>
+                                {{\App\Helpers\Helper::marks($user,$test->id)}}
+                                <a title="Разрешить пересдать" href="{{route('retake',[$test->id,$user->id])}}" class="btn btn-success">+</a>
+                                @elseif($test->isComplete($user->id)==2)
+                                {{\App\Helpers\Helper::marks($user,$test->id)}}
+                                <br>
+                                (Разрешено пересдать)
                                 @endif
+
                         </td>
                     @endforeach
                 </tr>

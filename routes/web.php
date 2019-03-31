@@ -59,7 +59,7 @@ Route::prefix('teacher/test/question')->middleware(['auth','teachers'])->group(f
 Route::prefix('teacher/dashboard')->middleware(['auth','teachers'])->group(function () {
    Route::get('/','TeachersController@index')->name('teacher');
    Route::get('/show/{id}/{group_id}','TeachersController@show')->name('teacher_subject');
-
+    Route::get('/retake/{test_id}/{user_id}','TeachersController@retake')->name('retake');
 });
 
 Route::prefix('student')->middleware('auth')->group(function () {

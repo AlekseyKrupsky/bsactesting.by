@@ -34,12 +34,10 @@ class User extends Authenticatable
         return $this->hasMany('App\Model\StdAnswer');
     }
 
-
     public function addStdAnswer($test_id,$answ)
     {
        return $this->stdanswers()->create(['test_id'=>$test_id,'answer'=>$answ]);
     }
-
 
     public function subjects()
     {
@@ -50,14 +48,13 @@ class User extends Authenticatable
     {
         $array = $this->subjects->pluck('id')->toArray();
         return Subject::all()->except($array);
-
     }
 
     public function connectSubject($sub_ids)
     {
         if(!empty($sub_ids)) $this->subjects()->syncWithoutDetaching($sub_ids);
-
     }
+
     public function disconnectSubject($sub_ids)
     {
         if(!empty($sub_ids)) $this->subjects()->detach($sub_ids);
@@ -71,11 +68,19 @@ class User extends Authenticatable
         return 0;
     }
 
-
     public function group()
     {
         return $this->hasOne('App\Model\Group');
     }
 
+    public function retakes()
+    {
+        return $this->hasMany('App\Model\UserRetake');
+    }
+
+    public function addRetake($test_id)
+    {
+        $this->retakes()->create(['test_id'=>$test_id]);
+    }
 
 }

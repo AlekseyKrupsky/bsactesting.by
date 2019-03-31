@@ -7,5 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class UserRetake extends Model
 {
     protected $table = 'user_retakes';
+    protected $fillable = ['test_id'];
     //
 }

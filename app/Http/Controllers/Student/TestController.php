@@ -31,6 +31,8 @@ class TestController extends Controller
             $test->isComplete = $test->isComplete();
         }
 
+//        dump($tests);
+
 //        dump(StdAnswer::whereNull('mark')->get());
 //        dump(StdAnswer::whereNotNull('mark')->get());
 
@@ -52,13 +54,18 @@ class TestController extends Controller
         if($is_complete==-1) return $this->result($id);
         if($is_complete==-2) return redirect(route('show_tests'));
 
-        elseif($is_complete==1) {
+        elseif($is_complete==1 || $is_complete==2) {
+
+
+            if($is_complete==2) {
+                $test->deleteRetake();
+            }
 
             if($test->mark_system=='simple') {
                 $questions = $test->questions->random($test->quest_number);
             }
             else {
-                $cost_info = unserialize($test->mark_system()->first()->question_info);
+                $cost_info = unserialize($test->mark_system()->get()->last()->question_info);
                 $all_questions = $test->questions;
                 $questions = collect();
                 foreach ($cost_info as $cost=>$count) {

@@ -57,12 +57,25 @@ class Test extends Model
         }
 
         else if($this->stdanswers->whereIn('mark',$marks)->where('user_id',$user_id)->count()){
+            if($this->retakes()->where('user_id',$user_id)->get()->count()) {
+                return 2; // Разрешено пересдать
+            }
+                
             return -1;//'Сдан'; //Оценка
         }
 
 
     }
 
+    public function retakes()
+    {
+        return $this->hasMany('App\Model\UserRetake');
+    }
+
+    public function deleteRetake()
+    {
+        $this->retakes()->where('user_id',\Auth::user()->id)->first()->delete();
+    }
 
     public function subject()
     {

@@ -15,33 +15,34 @@
                 </div>
             @endif
             <form action="{{route('tests_edit',$test->id)}}" method="post">
-                <div class="row">
-                    <div class="col-md-12">
+                {{--<div class="row">--}}
+                    <div class="row col-md-12">
                         <h3>Обновить тест</h3>
                     </div>
                     {{csrf_field()}}
                     {{method_field('patch')}}
-                    <div class="form-group">
+                    <div class="row mb-5 form-group">
+
                         <label for="name" class="col-md-4 control-label">Название</label>
                         <div class="col-md-6">
                             <input  type="text" class="form-control" name="name" value="{{$test->name}}" required>
                         </div>
                     </div>
                     @if($test->mark_system!='difficult')
-                        <div class="form-group">
+                        <div class="row mb-5 form-group">
                             <label for="quest_number" class="col-md-4 control-label">Количество вопросов</label>
                             <div class="col-md-6">
                                 <input  type="number" class="form-control" name="quest_number" value="{{$test->quest_number}}" required>
                             </div>
                         </div>
                     @endif
-                    <div class="form-group">
+                    <div class="row mb-5 form-group">
                         <label for="time" class="col-md-4 control-label">Время выполнения (минут)</label>
                         <div class="col-md-6">
                             <input  type="number" class="form-control" name="time" value="{{$test->time}}" required>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="row mb-5 form-group">
                         <label for="subject" class="col-md-4 control-label">Предмет</label>
                         <div class="col-md-6">
                             <select name="subject_id" id="subject" class="form-control">
@@ -51,7 +52,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="row mb-5 form-group">
                         <label for="mark_system" class="col-md-4 control-label">Система оценивания</label>
                         <div class="col-md-6">
                             <select name="mark_system" id="mark_system" class="form-control">
@@ -60,7 +61,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="row mb-5 form-group">
                         <label for="mark_system" class="col-md-4 control-label">Статус теста</label>
                         <div class="col-md-6">
                             <select name="status" id="status" class="form-control" @if($questions->count()==0) disabled @endif>
@@ -70,14 +71,14 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="row mb-20 form-group">
                         <div class="col-md-6">
                             <input type="submit" class="btn btn-success" value="Обновить">
                             <a class="btn btn-primary" href="{{route('question_add',$test->id)}}">Добавить вопрос</a>
                             <a href="{{route('tests')}}" class="btn btn-primary">Список всех тестов</a>
                         </div>
                     </div>
-                </div>
+                {{--</div>--}}
             </form>
 
             @if($test->mark_system=='difficult')
@@ -89,9 +90,9 @@
                         @if(!empty($quest_count))
                             @foreach($quest_count as $cost=>$count)
                                 <div class="form-group">
-                                    <label for="count{{$loop->index}}" class="col-md-4 control-label">
+                                    <label for="count{{$loop->index}}" class="col-md-4 control-label mb-5">
                                         Количество вопросов на {{$cost}} б. (всего {{$count}})</label>
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 mb-5">
                                         <input  type="number" min="0" max="{{$count}}" id="count{{$loop->index}}"
                                                 data-cost="{{$cost}}"
                                                 class="form-control test-cost" name="question_info[{{$cost}}]"
@@ -113,9 +114,9 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-12"><h4><b>Критерии оценивания</b></h4></div>
+                        <div class="col-md-12"><h4><b>Критерии оценивания</b></h4>
                             @for($i=0; $i<=10;$i++)
-                                <div class="form-group">
+                                <div class="row form-group mb-5">
                                     <label for="limit{{$i}}" class="col-md-4 control-label">
                                         Баллы на оценку {{$i}}</label>
                                     <div class="col-md-3">
@@ -131,7 +132,8 @@
                                     </div>
                                 </div>
                             @endfor
-                        <input class="btn btn-success" type="submit" value="Сохранить систему оценивания">
+                        <input class="btn btn-success mb-10" type="submit" value="Сохранить систему оценивания">
+                        </div>
                     </div>
                 </form>
             @endif
@@ -139,7 +141,8 @@
             <form class="delete" action="{{route('test_delete',$test->id)}}" method="post">
                 {{csrf_field()}}
                 {{method_field('delete')}}
-                <button class="btn btn-danger">Удалить тест</button></form>
+                <button class="btn btn-danger">Удалить тест</button>
+            </form>
             <div class="row">
                 @if($questions->count()<$test->quest_number)
                 <div class="col-md-12 alert alert-warning">Недостаточно вопросов. Необходимо добавить минимум <b>  {{$test->quest_number-$questions->count()}}</b></div>
@@ -167,7 +170,7 @@
                     </div>
                     <div class="col-md-12 answers-admin" id="quest-{{$question->id}}">
                         @foreach($answers->where('question_id',$question->id) as $answer)
-                            <div class="alert @if($answer->correct)alert-success @else alert-danger @endif">
+                            <div class="alert answer-alert @if($answer->correct)alert-success @else alert-danger @endif">
                                 {{$answer->text}}
                             </div>
                         @endforeach

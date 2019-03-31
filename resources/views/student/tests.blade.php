@@ -10,7 +10,7 @@
             </div>
         </div>
             @foreach($tests as $test)
-                <div class="row">
+                <div class="row mb-5">
                     <div class="col-md-8">
                     {{$test->name}}
                     </div>
@@ -25,7 +25,10 @@
                         <a class="btn btn-primary" href="{{route('show_test',$test->id)}}">Результат</a>
                         @endif
                         @if($test->isComplete==-2)
-                            <a class="btn btn-primary" href="" disabled>Результат не отправлен</a>
+                            <button class="btn btn-primary" disabled>Результат не отправлен</button>
+                        @endif
+                        @if($test->isComplete==2)
+                            <a class="btn btn-primary" href="{{route('show_test',$test->id)}}">Пересдать</a>
                         @endif
                     </div>
                 </div>

@@ -196,3 +196,45 @@ top:-100px;
 width: max-content;
 font-size: 21px;
 }
+
+.mb-5{
+    margin-bottom: 5px;
+}
+
+.mb-10{
+    margin-bottom: 10px;
+}
+
+.mb-20{
+    margin-bottom: 20px;
+}
+
+.test-buttons {
+    display: flex;
+    flex-direction: row;
+}
+
+.space-between {
+    display: flex;
+    justify-content: space-between;
+}
+
+.align-center {
+    display: flex;
+    align-items: center;
+}
+
+.tests-list {
+    padding: 2px 0;
+     cursor: pointer;
+    transition: 500ms;
+ }
+
+.tests-list:hover {
+    background: #a1d4ee;
+}
+
+.answer-alert {
+    padding: 5px 10px;
+    margin-bottom: 5px;
+}

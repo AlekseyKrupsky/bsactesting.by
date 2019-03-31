@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <form action="{{route('groups')}}" method="post">
+            <form action="{{route('groups')}}" class="col-md-12" method="post">
                 {{csrf_field()}}
                 <input type="text" name="name" placeholder="СП741" required>
                 <input class="btn btn-primary"  type="submit" value="Добавить группу">
@@ -15,13 +15,14 @@
         <h3>Список добавленных групп:</h3>
 
             @foreach($groups as $group)
-                <div class="row">
-                    <form action="{{route('one_group',$group->id)}}" method="post" class="col-md-9">
+                <div class="row mb-5">
+                    <form action="{{route('one_group',$group->id)}}" method="post" class="col-md-9  align-center">
                         {{csrf_field()}}
-                    <div class="col-md-3">
+                    <div class="row col-md-3">
                         {{--{{$loop->index+1}}--}}
                         <input type="text" class="form-control" name="name" value="{{$group->name}}" >
                     </div>
+
                         <div class="col-md-6">
                         @if($users->where('group_id',$group->id)->count())
                         <select name="headman" class="form-control" id="">
@@ -46,7 +47,7 @@
                             @endif
                         </div>
                         <div class="col-md-3">
-                    <input type="submit" class="btn btn-success" value="Сохранить">
+                            <input type="submit" class="btn btn-success" value="Сохранить">
                         </div>
                     </form>
                     {{--</form>--}}
