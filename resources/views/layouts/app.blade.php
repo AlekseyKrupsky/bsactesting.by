@@ -38,6 +38,7 @@
                     <!-- Left Side Of Navbar -->
                     @if(Auth::check())
                     <ul class="nav navbar-nav">
+                        @if(Auth::user()->role=='admin')
                           <li class="dropdown">
                               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Пользователи <span class="caret"></span></a>
                               <ul class="dropdown-menu" role="menu">
@@ -54,8 +55,11 @@
                           </li>
                         <li><a href="{{route('groups')}}">Группы</a></li>
                         <li><a href="{{route('subjects')}}">Предметы</a></li>
+                        @endif
+                        @if(Auth::user()->role!='student')
                         <li><a href="{{route('tests')}}">Редактировать тесты</a></li>
                         <li><a href="{{route('teacher')}}">Страница преподавателя</a></li>
+                        @endif
                         <li><a href="{{route('show_tests')}}">Пройти тест</a></li>
                     </ul>
                     @endif
