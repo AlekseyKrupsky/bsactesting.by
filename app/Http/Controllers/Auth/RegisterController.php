@@ -64,18 +64,32 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
 
+        dump($data);
+
+        if($data['group']== "0")
+        {
+            $role = "unsign_teacher";
+            $group_id = NULL;
+        }
+        else {
+            $role = "unsign_student";
+            $group_id = $data['group'];
+        }
+
+
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
-            'role' => $data['role'],
-            'group_id'=>$data['group']
+            'role' => $role,
+            'group_id'=>$group_id
         ]);
 
-        $group = Group::find($data['group']);
-        $group->headman = $user->id;
-        $group->save();
-
+        if(!empty($data['headman'])) {
+            $group = Group::find($data['group']);
+            $group->headman = $user->id;
+            $group->save();
+        }
         return $user;
 
     }
