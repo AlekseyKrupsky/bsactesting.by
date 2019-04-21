@@ -6,6 +6,7 @@ use App\Model\Group;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -14,8 +15,14 @@ class UserController extends Controller
 
     public function new_users()
     {
+
         $groups = Group::all();
-        $users = User::whereIn('role',['unsign_student','unsign_teacher'])->get();
+        if(Auth::user()->role == 'teacher') {
+            $users = User::whereIn('role',['unsign_student'])->get();
+        }
+        if(Auth::user()->role == 'admin') {
+            $users = User::whereIn('role', ['unsign_student', 'unsign_teacher'])->get();
+        }
         return view('new_users',['users'=>$users,'groups'=>$groups]);
     }
 

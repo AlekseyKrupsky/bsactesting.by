@@ -62,10 +62,39 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="stud-group" class="col-md-4 control-label">Преподаватель/Группа</label>
+                            <label for="stud-group" class="col-md-4 control-label">Тип пользователя</label>
+                            <div class="col-md-6 ">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="radio" class="role_student" name="role" value="student" {{ old('role')=='student' ? 'checked' : '' }}> Студент
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="role" value="teacher" {{ old('role')=='teacher' ? 'checked' : '' }}> Преподаватель
+                                    </label>
+
+                                    <div class="student_reg_form">
+                                        <div class="col-md-6 ">
+                                    <select class="form-control" name="group" id="stud-group">
+                                        @foreach($groups as $group)
+                                            <option value="{{$group->id}}">{{$group->name}}</option>
+                                        @endforeach
+                                    </select>
+                                            <div class="col-md-6 ">
+                                    <label>
+                                        <input type="checkbox" name="headman" {{ old('headman') ? 'checked' : '' }}> Староста
+                                    </label>
+                                            </div></div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group student_reg_form">
+                            <label for="stud-group" class="col-md-4 control-label">Группа</label>
                             <div class="col-md-6" >
                                 <select class="form-control" name="group" id="stud-group">
-                                    <option value="0">Преподаватель</option>
                                     @foreach($groups as $group)
                                         <option value="{{$group->id}}">{{$group->name}}</option>
                                     @endforeach
@@ -73,7 +102,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group student_reg_form">
                             <div class="col-md-6 col-md-offset-4">
                                 <div class="checkbox">
                                     <label>

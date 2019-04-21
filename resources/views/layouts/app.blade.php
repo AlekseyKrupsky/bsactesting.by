@@ -17,89 +17,93 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
 <body>
-    <div id="app">
-        <nav class="navbar navbar-default navbar-static-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <!-- Collapsed Hamburger -->
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
-                        <span class="sr-only">Toggle Navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <img class="logo" src="{{asset('img/bsac_logo.svg')}}" alt="">
-                    <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}">
-                        {{ config('app.name', 'Laravel') }}
-                    </a>
-                </div>
-                <div class="collapse navbar-collapse" id="app-navbar-collapse">
-                    <!-- Left Side Of Navbar -->
-                    @if(Auth::check())
+<div id="app">
+    <nav class="navbar navbar-default navbar-static-top">
+        <div class="container">
+            <div class="navbar-header">
+                <!-- Collapsed Hamburger -->
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
+                    <span class="sr-only">Toggle Navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <img class="logo" src="{{asset('img/bsac_logo.svg')}}" alt="">
+                <!-- Branding Image -->
+                <a class="navbar-brand" href="{{ url('/') }}">
+                    {{ config('app.name', 'Laravel') }}
+                </a>
+            </div>
+            <div class="collapse navbar-collapse" id="app-navbar-collapse">
+                <!-- Left Side Of Navbar -->
+                @if(Auth::check())
                     <ul class="nav navbar-nav">
-                        @if(Auth::user()->role=='admin')
-                          <li class="dropdown">
-                              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Пользователи <span class="caret"></span></a>
-                              <ul class="dropdown-menu" role="menu">
-                                  <li>
-                                      <a href="{{route('new_users')}}">Новые пользователи</a>
-                                  </li>
-                                  <li>
-                                      <a href="{{route('teachers')}}">Преподаватели</a>
-                                  </li>
-                                  <li>
-                                      <a href="{{route('reset_password')}}">Сброс паролей</a>
-                                  </li>
-                              </ul>
-                          </li>
-                        <li><a href="{{route('groups')}}">Группы</a></li>
-                        <li><a href="{{route('subjects')}}">Предметы</a></li>
+                        @if(Auth::user()->role=='admin' || Auth::user()->role=='teacher')
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Пользователи <span class="caret"></span></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>
+                                        <a href="{{route('new_users')}}">Новые пользователи</a>
+                                    </li>
+                                    @if(Auth::user()->role=='admin')
+                                    <li>
+                                        <a href="{{route('teachers')}}">Преподаватели</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{route('reset_password')}}">Сброс паролей</a>
+                                    </li>
+                                        @endif
+                                </ul>
+                            </li>
+                            @if(Auth::user()->role=='admin')
+                            <li><a href="{{route('groups')}}">Группы</a></li>
+                            <li><a href="{{route('subjects')}}">Предметы</a></li>
+                            @endif
                         @endif
-                        @if(Auth::user()->role!='student')
-                        <li><a href="{{route('tests')}}">Редактировать тесты</a></li>
-                        <li><a href="{{route('teacher')}}">Страница преподавателя</a></li>
+                        @if(Auth::user()->role!='student' && Auth::user()->role!='unsign_student')
+                            <li><a href="{{route('tests')}}">Редактировать тесты</a></li>
+                            <li><a href="{{route('teacher')}}">Страница преподавателя</a></li>
                         @endif
                         <li><a href="{{route('show_tests')}}">Пройти тест</a></li>
                     </ul>
-                    @endif
-                    <!-- Right Side Of Navbar -->
-                    <ul class="nav navbar-nav navbar-right">
-                        <!-- Authentication Links -->
-                        @if (Auth::guest())
-                            <li><a href="{{ route('login') }}">Вход</a></li>
-                            <li><a href="{{ route('register') }}">Регистрация</a></li>
-                        @else
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                    {{ Auth::user()->name }} <span class="caret"></span>
-                                </a>
+            @endif
+            <!-- Right Side Of Navbar -->
+                <ul class="nav navbar-nav navbar-right">
+                    <!-- Authentication Links -->
+                    @if (Auth::guest())
+                        <li><a href="{{ route('login') }}">Вход</a></li>
+                        <li><a href="{{ route('register') }}">Регистрация</a></li>
+                    @else
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                {{ Auth::user()->name }} <span class="caret"></span>
+                            </a>
 
-                                <ul class="dropdown-menu" role="menu">
-                                    <li>
-                                        <a href="{{ route('logout') }}"
-                                            onclick="event.preventDefault();
+                            <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    <a href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                            Выйти
-                                        </a>
+                                        Выйти
+                                    </a>
 
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                            {{ csrf_field() }}
-                                        </form>
-                                    </li>
-                                </ul>
-                            </li>
-                        @endif
-                    </ul>
-                </div>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        {{ csrf_field() }}
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    @endif
+                </ul>
             </div>
-        </nav>
+        </div>
+    </nav>
 
-        @yield('content')
-    </div>
+    @yield('content')
+</div>
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
-    <script src="{{ asset('js/script.js') }}"></script>
+<!-- Scripts -->
+<script src="{{ asset('js/app.js') }}"></script>
+<script src="{{ asset('js/script.js') }}"></script>
 </body>
 </html>

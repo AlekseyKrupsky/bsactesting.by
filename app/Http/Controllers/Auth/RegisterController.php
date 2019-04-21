@@ -64,8 +64,6 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
 
-        dump($data);
-
         if($data['group']== "0")
         {
             $role = "unsign_teacher";

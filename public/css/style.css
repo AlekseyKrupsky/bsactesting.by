@@ -20,9 +20,9 @@ input[type=radio].check + label.test-answer,input[type=checkbox].check + label.t
 }
 
 input[type=radio].check:checked + label.test-answer ,input[type=checkbox].check:checked + label.test-answer{
-    background: #dff0d8;
-    border: 1px solid #d6e9c6;
-    color: #2ab27b;
+    background: #c1cff0;
+    border: 1px solid #c3c0e9;
+    color: #3735d5;
 }
 
 .logo {
@@ -237,4 +237,14 @@ font-size: 21px;
 .answer-alert {
     padding: 5px 10px;
     margin-bottom: 5px;
+}
+
+.student_reg_form {
+    display: none;
+}
+
+.role_student:checked + .student_reg_form {
+    border: 1px solid black;
+    color:red;
+    display: block;
 }
