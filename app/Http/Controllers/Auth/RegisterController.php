@@ -52,6 +52,8 @@ class RegisterController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
+            'role' => 'required|in:unsign_teacher,unsign_student',
+            'group'=> 'exists:groups,id',
         ]);
     }
 
@@ -64,16 +66,14 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
 
-        if($data['group']== "0")
+//        dd($data);
+        $role = $data['role'];
+
+        if($data['group'] && $data['role']=="unsign_student")
         {
-            $role = "unsign_teacher";
-            $group_id = NULL;
-        }
-        else {
-            $role = "unsign_student";
             $group_id = $data['group'];
         }
-
+        else  $group_id = NULL;
 
         $user = User::create([
             'name' => $data['name'],
@@ -83,7 +83,7 @@ class RegisterController extends Controller
             'group_id'=>$group_id
         ]);
 
-        if(!empty($data['headman'])) {
+        if(!empty($data['headman']) && $data['role']=="unsign_student") {
             $group = Group::find($data['group']);
             $group->headman = $user->id;
             $group->save();

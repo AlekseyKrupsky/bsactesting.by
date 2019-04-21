@@ -1,29 +1,29 @@
-var answers = $('.answer').length;
-
-$('.add-answer').click(function (eo) {
-   eo.preventDefault();
-   answers+=1;
-   var answer = "<div class=\"form-group answer\">\n" +
-       "                    <div class=\"col-md-4\">\n" +
-       "                        <input type=\"checkbox\" id=\"right-a"+answers+"\" class=\"check\" name=\"rightAnswer[]\" value=\"a"+answers+"\">\n" +
-       "                        <label for=\"right-a"+answers+"\" class=\"control-label btn btn-danger\">\n" +
-       "                            Это правильный ответ\n" +
-       "                        </label>\n" +
-       "                        <label for=\"a"+answers+"\" class=\"control-label\">\n" +
-       "                            <button class=\"btn btn-danger delete-answer\" >Удалить</button> Текст ответа:\n" +
-       "                        </label>\n" +
-       "                    </div>\n" +
-       "                    <div class=\"col-md-8\">\n" +
-       "                        <textarea required class=\"form-control\" name=\"a"+answers+"\"></textarea>\n" +
-       "                    </div>\n" +
-       "                </div>";
-$('.answers').append(answer);
-});
-
-$(document).on('click', '.delete-answer' , function(eo) {
-    eo.preventDefault();
-    $(this).closest('.answer').remove();
-});
+// var answers = $('.answer').length;
+//
+// $('.add-answer').click(function (eo) {
+//    eo.preventDefault();
+//    answers+=1;
+//    var answer = "<div class=\"form-group answer\">\n" +
+//        "                    <div class=\"col-md-4\">\n" +
+//        "                        <input type=\"checkbox\" id=\"right-a"+answers+"\" class=\"check\" name=\"rightAnswer[]\" value=\"a"+answers+"\">\n" +
+//        "                        <label for=\"right-a"+answers+"\" class=\"control-label btn btn-danger\">\n" +
+//        "                            Это правильный ответ\n" +
+//        "                        </label>\n" +
+//        "                        <label for=\"a"+answers+"\" class=\"control-label\">\n" +
+//        "                            <button class=\"btn btn-danger delete-answer\" >Удалить</button> Текст ответа:\n" +
+//        "                        </label>\n" +
+//        "                    </div>\n" +
+//        "                    <div class=\"col-md-8\">\n" +
+//        "                        <textarea required class=\"form-control\" name=\"a"+answers+"\"></textarea>\n" +
+//        "                    </div>\n" +
+//        "                </div>";
+// $('.answers').append(answer);
+// });
+//
+// $(document).on('click', '.delete-answer' , function(eo) {
+//     eo.preventDefault();
+//     $(this).closest('.answer').remove();
+// });
 
 
 $('.open-ans').click(function () {
@@ -128,3 +128,12 @@ timer = setTimeout(myTimer,1000);
 //    })
 //
 // });
+
+
+$("#imstudent").click( function(){
+    if( $(this).is(':checked') ) $('.student_reg_form').show();
+});
+
+$("#imteacher").click( function(){
+    if( $(this).is(':checked') ) $('.student_reg_form').hide();
+});
