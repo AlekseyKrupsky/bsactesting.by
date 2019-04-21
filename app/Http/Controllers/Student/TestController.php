@@ -14,12 +14,6 @@ class TestController extends Controller
 {
     //
 
-
-    public function __construct()
-    {
-        $this->middleware('acceptstudent');
-    }
-
     public function index()
     {
         $std_ans = Auth::user()->stdanswers->where('mark','!=',null)->pluck('test_id')->toArray();

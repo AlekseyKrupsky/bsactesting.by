@@ -19,6 +19,9 @@ class onlyAdmin
     public function handle($request, Closure $next)
     {
         if(Auth::user()->role=='admin')  return $next($request);
-        return new Response(view('access_denied'));
+        return new Response(view(
+            'access_denied',
+            ['message'=>'К этой странице имеет доступ только администратор']
+        ));
     }
 }

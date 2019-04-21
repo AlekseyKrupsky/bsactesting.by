@@ -63,7 +63,7 @@ Route::prefix('teacher/dashboard')->middleware(['auth','teachers'])->group(funct
     Route::get('/retake/{test_id}/{user_id}','TeachersController@retake')->name('retake');
 });
 
-Route::prefix('student')->middleware('auth')->group(function () {
+Route::prefix('student')->middleware(['auth','confirmed'])->group(function () {
     Route::get('/tests','Student\TestController@index')->name('show_tests');
     Route::get('/test/{id}','Student\TestController@show')->name('show_test');
     Route::post('/test/{id}','Student\TestController@check');
