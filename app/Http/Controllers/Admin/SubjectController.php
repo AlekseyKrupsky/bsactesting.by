@@ -22,13 +22,15 @@ class SubjectController extends Controller
     {
 
        Subject::create($request->all());
-       return back();
+       return back()->with('message','Новый предмет успешно добавлен');
     }
 
     public function destroy($id)
     {
-        Subject::find($id)->delete();
-        return back();
+        $subject = Subject::find($id);
+        $name = $subject->name;
+        $subject->delete();
+        return back()->with('message','Предмет \''.$name.'\' был успешно удален');
     }
 
 

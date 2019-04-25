@@ -51,7 +51,7 @@ class GroupController extends Controller
         $group->name = $request->name;
         $group->save();
 
-        return back();
+        return back()->with('message','Группа успешно добавлена');
     }
 
     /**
@@ -109,7 +109,10 @@ class GroupController extends Controller
     public function destroy($id)
     {
         //
-        Group::find($id)->delete();
-        return back();
+        $group = Group::find($id);
+        $name = $group->name;
+        $group->delete();
+
+        return back()->with('message','Группа '.$name.' была успешно удалена');
     }
 }

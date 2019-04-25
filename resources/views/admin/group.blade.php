@@ -1,7 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
+
+
     <div class="container">
+
+        @include('validerror')
+
+        @include('message')
         <div class="row">
             <form action="{{route('groups')}}" class="col-md-12" method="post">
                 {{csrf_field()}}
@@ -10,7 +16,7 @@
             </form>
         </div>
 
-        @include('validerror')
+
 
         <h3>Список добавленных групп:</h3>
 

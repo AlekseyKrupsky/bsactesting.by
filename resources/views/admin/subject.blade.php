@@ -2,7 +2,12 @@
 
 @section('content')
 
+
+
     <div class="container">
+        @include('validerror')
+        @include('message')
+
         <div class="row">
             <form action="{{route('subjects')}}" method="post" class="col-md-12" >
                 {{csrf_field()}}
@@ -11,7 +16,7 @@
             </form>
         </div>
 
-        @include('validerror')
+
 
         @foreach($errors->all() as $error)
             {{$error}}

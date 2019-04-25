@@ -129,7 +129,6 @@ class TestController extends Controller
         return redirect(route('show_test',$request->test));
     }
 
-
     public function result($id)
     {
         $mark = Auth::user()->stdanswers->where('test_id',$id)->last()->mark;
