@@ -24,7 +24,7 @@ class QuestionValidate extends FormRequest
     public function rules()
     {
         return [
-            'question'=>'required|max:255',
+            'question'=>'required|max:450',
 //            'question'=>'required|unique:questions,text|max:255',
             'answer.*.text'=>'required|bail|max:255',
             'answer.*.file'=>'nullable|image',
