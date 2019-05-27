@@ -44493,6 +44493,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -44501,26 +44512,37 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             email: '',
             users: [],
             message: [],
-            type: ''
+            type: '',
+            users_type: 'all',
+            filtered: []
         };
     },
 
     methods: {
-        search: function search() {
+        sort: function sort() {
             var _this = this;
 
-            axios.post('/api/user/search', { name: this.name, email: this.email }).then(function (response) {
+            this.filtered = [];
 
-                _this.users = response.data;
-                // this.users.splice(0,this.users.length);
-                // for(let item in response.data) {
-                //     this.users.push({
-                //         name:response.data[item].name,
-                //         email:response.data[item].email,
-                //     })
-                // }
-                _this.users.splice(_this.users.length, 0);
+            this.users.forEach(function (user) {
+                if (user.name.indexOf(_this.name) !== -1 && user.email.indexOf(_this.email) !== -1) {
+                    _this.filtered.push(user);
+                }
             });
+
+            console.log(this.filtered);
+        },
+        delete_permanent: function delete_permanent(id) {
+            var _this2 = this;
+
+            var array = this.users;
+            this.users = [];
+            array.forEach(function (user) {
+                if (user.id !== id) _this2.users.push(user);
+                // console.log(123);
+            });
+
+            this.sort();
         },
         onResponse: function onResponse(data) {
             if (Array.isArray(data)) {
@@ -44530,6 +44552,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
             this.type = data.type;
         }
+    },
+    mounted: function mounted() {
+        var _this3 = this;
+
+        axios.post('/api/user/search').then(function (response) {
+            console.log(response);
+            _this3.users = response.data;
+            _this3.filtered = response.data;
+            // this.users.splice(0,this.users.length);
+            // for(let item in response.data) {
+            //     this.users.push({
+            //         name:response.data[item].name,
+            //         email:response.data[item].email,
+            //     })
+            // }
+            _this3.users.splice(_this3.users.length, 0);
+        });
     }
 });
 
@@ -44556,12 +44595,15 @@ var render = function() {
         attrs: { type: "text", placeholder: "Имя Фамилия" },
         domProps: { value: _vm.name },
         on: {
-          input: function($event) {
-            if ($event.target.composing) {
-              return
-            }
-            _vm.name = $event.target.value
-          }
+          input: [
+            function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.name = $event.target.value
+            },
+            _vm.sort
+          ]
         }
       }),
       _vm._v(" "),
@@ -44577,26 +44619,97 @@ var render = function() {
         attrs: { type: "email", placeholder: "email@gmail.com" },
         domProps: { value: _vm.email },
         on: {
-          input: function($event) {
-            if ($event.target.composing) {
-              return
-            }
-            _vm.email = $event.target.value
-          }
+          input: [
+            function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.email = $event.target.value
+            },
+            _vm.sort
+          ]
         }
       }),
       _vm._v(" "),
-      _c("button", { on: { click: _vm.search } }, [_vm._v("Найти")]),
+      _c("label", { attrs: { for: "all" } }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.users_type,
+              expression: "users_type"
+            }
+          ],
+          attrs: { type: "radio", value: "all", id: "all" },
+          domProps: { checked: _vm._q(_vm.users_type, "all") },
+          on: {
+            change: function($event) {
+              _vm.users_type = "all"
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c("span", [_vm._v("Все")])
+      ]),
+      _vm._v(" "),
+      _c("label", { attrs: { for: "del" } }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.users_type,
+              expression: "users_type"
+            }
+          ],
+          attrs: { type: "radio", value: "del", id: "del" },
+          domProps: { checked: _vm._q(_vm.users_type, "del") },
+          on: {
+            change: function($event) {
+              _vm.users_type = "del"
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c("span", [_vm._v("Удаленные пользователи")])
+      ]),
+      _vm._v(" "),
+      _c("label", { attrs: { for: "notdel" } }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.users_type,
+              expression: "users_type"
+            }
+          ],
+          attrs: { type: "radio", value: "notdel", id: "notdel" },
+          domProps: { checked: _vm._q(_vm.users_type, "notdel") },
+          on: {
+            change: function($event) {
+              _vm.users_type = "notdel"
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c("span", [_vm._v("Кроме удаленных")])
+      ]),
       _vm._v(" "),
       _c("hr"),
       _vm._v(" "),
-      _vm._l(_vm.users, function(user) {
+      _vm._l(_vm.filtered, function(user) {
         return _c(
           "div",
           [
             _c("userinfo", {
-              attrs: { user: user },
-              on: { changepass: _vm.onResponse }
+              key: user.id,
+              attrs: { user: user, mode: _vm.users_type },
+              on: {
+                changepass: _vm.onResponse,
+                delete_permanent: _vm.delete_permanent
+              }
             })
           ],
           1
@@ -44681,15 +44794,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['user'],
+    props: ['user', 'mode'],
     data: function data() {
         return {
             pass: '',
             name: this.user.name,
             email: this.user.email,
-            id: this.user.id
+            id: this.user.id,
+            deleted_at: this.user.deleted_at
         };
     },
 
@@ -44713,6 +44830,67 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     });
                 }
             });
+        },
+        delete_user: function delete_user() {
+            var _this2 = this;
+
+            axios.post('/api/user/delete', { id: this.id }).then(function (response) {
+                // this.users = response.data;
+
+                _this2.deleted_at = true;
+
+                // this.$emit('changepass',{
+                //     type:"success",text:response.data.message
+                // })
+            }).catch(function (error) {
+                if (error.response) {
+                    console.log(error.response);
+                    // this.$emit('changepass',{
+                    //     type:"error",text:error.response.data
+                    // })
+                }
+            });
+        },
+        restore_user: function restore_user() {
+            var _this3 = this;
+
+            axios.post('/api/user/restore', { id: this.id }).then(function (response) {
+
+                _this3.deleted_at = false;
+
+                // this.users = response.data;
+                // this.$emit('changepass',{
+                //     type:"success",text:response.data.message
+                // })
+            }).catch(function (error) {
+                if (error.response) {
+                    console.log(error.response);
+                    // this.$emit('changepass',{
+                    //     type:"error",text:error.response.data
+                    // })
+                }
+            });
+        },
+        delete_permanent: function delete_permanent() {
+            var _this4 = this;
+
+            axios.delete('/api/user/delete/' + this.id).then(function (response) {
+                // this.users = response.data;
+
+                // this.deleted_at = true;
+
+                console.log(_this4.id);
+                // console.log(response);
+
+                _this4.$emit('delete_permanent', _this4.id);
+            }).catch(function (error) {
+                if (error.response) {
+                    console.log(error.response);
+                    // this.$emit('changepass',{
+                    //     type:"error",text:error.response.data
+                    // })
+                }
+            });
         }
     }
 });
@@ -44725,37 +44903,106 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "row" }, [
-    _c("div", { staticClass: "col-md-3" }, [_vm._v(_vm._s(_vm.name))]),
-    _vm._v(" "),
-    _c("div", { staticClass: "col-md-3" }, [_vm._v(_vm._s(_vm.email))]),
-    _vm._v(" "),
-    _c("input", {
+  return _c(
+    "div",
+    {
       directives: [
         {
-          name: "model",
-          rawName: "v-model",
-          value: _vm.pass,
-          expression: "pass"
+          name: "show",
+          rawName: "v-show",
+          value:
+            _vm.mode == "all" ||
+            (_vm.mode == "del" && _vm.deleted_at) ||
+            (_vm.mode == "notdel" && !_vm.deleted_at),
+          expression:
+            "mode=='all' || (mode=='del' && deleted_at) || (mode=='notdel' && !deleted_at)"
         }
       ],
-      staticClass: "form-group",
-      attrs: { type: "text", placeholder: "Новый пароль" },
-      domProps: { value: _vm.pass },
-      on: {
-        input: function($event) {
-          if ($event.target.composing) {
-            return
+      staticClass: "row"
+    },
+    [
+      _c("div", { staticClass: "col-md-3" }, [_vm._v(_vm._s(_vm.name))]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-md-3" }, [_vm._v(_vm._s(_vm.email))]),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.pass,
+            expression: "pass"
           }
-          _vm.pass = $event.target.value
+        ],
+        staticClass: "form-group",
+        attrs: { type: "text", placeholder: "Новый пароль" },
+        domProps: { value: _vm.pass },
+        on: {
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.pass = $event.target.value
+          }
         }
-      }
-    }),
-    _vm._v(" "),
-    _c("button", { staticClass: "form-group", on: { click: _vm.save } }, [
-      _vm._v("Сохранить")
-    ])
-  ])
+      }),
+      _vm._v(" "),
+      _c("button", { staticClass: "form-group", on: { click: _vm.save } }, [
+        _vm._v("Сохранить")
+      ]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: !_vm.deleted_at,
+              expression: "!deleted_at"
+            }
+          ],
+          staticClass: "form-group",
+          on: { click: _vm.delete_user }
+        },
+        [_vm._v("Удалить")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.deleted_at,
+              expression: "deleted_at"
+            }
+          ],
+          staticClass: "form-group",
+          on: { click: _vm.restore_user }
+        },
+        [_vm._v("Восстановить")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.deleted_at,
+              expression: "deleted_at"
+            }
+          ],
+          staticClass: "form-group",
+          on: { click: _vm.delete_permanent }
+        },
+        [_vm._v("Удалить навегда")]
+      )
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true

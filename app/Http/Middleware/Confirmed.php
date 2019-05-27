@@ -17,9 +17,16 @@ class Confirmed
      */
     public function handle($request, Closure $next)
     {
-        if(Auth::user()->role == 'admin' || Auth::user()->role == 'teacher'|| Auth::user()->role == 'student')
+        if(
+            (Auth::user()->role == 'admin' ||
+            Auth::user()->role == 'teacher'||
+            Auth::user()->role == 'student') &&
+            Auth::user()->deleted_at==null)
             return  $next($request);
-//        return view('access_denied'); //redirect('/login');
+        if(Auth::user()->deleted_at!=null) {
+            return new Response(view('access_denied',['message'=>'Ваш профиль был удален']));
+        }
+
         return new Response(view('access_denied',['message'=>'Только подтвержденные пользователи имеют доступ к этой странице']));
 
     }

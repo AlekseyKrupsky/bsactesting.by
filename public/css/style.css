@@ -189,7 +189,7 @@ TD {
     max-width: 90%;
 left:50%;
     /*top:55px;*/
-top:-100px;
+top:-200px;
     transition: 500ms;
     transform: translate(-50%);
     z-index: 1020;
@@ -244,4 +244,13 @@ font-size: 21px;
     border: 1px solid black;
     color:red;
     display: block;
+}
+
+.timer {
+    position: fixed;
+    z-index: 1111;
+    top: 0;
+    right: 0;
+    background: white;
+    padding: 5px;
 }

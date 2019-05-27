@@ -20,12 +20,6 @@ Route::middleware('auth')->get('/', 'HomeController@index')->name('home');
 Route::prefix('admin')->middleware(['auth','onlyAdmin'])->group(function () {
     Route::get('/reset','Admin\UserController@reset')->name('reset_password');
 
-
-    Route::get('/groups', 'Admin\GroupController@index')->name('groups');
-    Route::post('/groups', 'Admin\GroupController@store');
-    Route::delete('/group/{id}', 'Admin\GroupController@destroy')->name('one_group');
-    Route::post('/group/{id}', 'Admin\GroupController@update')->name('one_group');
-
     Route::get('/teachers', 'Admin\TeacherController@index')->name('teachers');
     Route::patch('/teachers/{id}', 'Admin\TeacherController@update')->name('teacher_update');
 
@@ -40,6 +34,15 @@ Route::patch('/new_users/{id}', 'Admin\UserController@update')->name('new_users_
 Route::delete('/new_users/{id}', 'Admin\UserController@delete')->name('new_users_delete');
 });
 
+
+Route::middleware(['auth','teachers'])->group(function () {
+
+Route::get('/groups', 'Admin\GroupController@index')->name('groups');
+Route::post('/groups', 'Admin\GroupController@store');
+Route::delete('/group/{id}', 'Admin\GroupController@destroy')->name('one_group');
+Route::post('/group/{id}', 'Admin\GroupController@update')->name('one_group');
+
+});
 Route::prefix('teacher/tests')->middleware(['auth','teachers'])->group(function () {
     Route::get('/','TestsController@index')->name('tests');
     Route::get('/edit/{id}','TestsController@edit')->name('tests_edit');

@@ -51,10 +51,7 @@ class UserController extends Controller
 
     public function search(Request $request)
     {
-       $users =  User::where('name','like','%'.$request->name.'%')->
-        where('email','like','%'.$request->email.'%')
-           ->select('name','email')
-           ->get();
+       $users =  User::select('name','email','id','deleted_at')->get();
 
         return $users;
     }
@@ -70,19 +67,50 @@ class UserController extends Controller
             'pass'=>'required|min:6'
         ]);
 
-
-
         $user = User::find($request->id);
         $user->password = Hash::make($request->pass);
         $user->save();
         return response()->json(['message'=>'Пароль успешно изменен'],200);
-//        return response()->json(['message'=>'asd'],422);
 
-//        $request->validate([
-//
-//        ]);
-//
-//        return 123;
+    }
 
+    public function deleteUser(Request $request)
+    {
+        $user = User::find($request->id);
+        if($user) {
+            $user->deleted_at = new \DateTime();
+            $user->save();
+
+            return response()->json(['message'=>'User has been safe deleted'],200);
+        }
+        return response()->json(['message'=>'User does not exist'],404);
+
+    }
+
+    public function deletePermanentUser(User $user)
+    {
+
+        if($user) {
+
+            $user->delete();
+            return response()->json(['message'=>'User has been deleted'],200);
+        }
+        return response()->json(['message'=>'User does not exist'],404);
+
+    }
+
+
+
+    public function restoreUser(Request $request)
+    {
+
+        $user = User::find($request->id);
+        if($user) {
+            $user->deleted_at = null;
+            $user->save();
+
+            return response()->json(['message'=>'User has been restored'],200);
+        }
+        return response()->json(['message'=>'User does not exist'],404);
     }
 }

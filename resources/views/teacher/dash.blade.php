@@ -54,7 +54,7 @@
                     </td>
                 @endforeach
             </tr>
-            @foreach($group_show->users()->orderBy('name')->get() as $user)
+            @foreach($group_show->users()->orderBy('name')->where('deleted_at',null)->get() as $user)
                 <tr>
                     <td>{{$loop->index+1}}</td>
                     <td>{{$user->name}}</td>
@@ -72,8 +72,7 @@
                                 {{\App\Helpers\Helper::marks($user,$test->id)}}
                                 <br>
                                 (Разрешено пересдать)
-                                @endif
-
+                            @endif
                         </td>
                     @endforeach
                 </tr>

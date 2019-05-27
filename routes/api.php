@@ -19,10 +19,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
 
-Route::post('/test',function () {
-   return 12345;
-});
+//Route::post('/test',function () {
+//   return 12345;
+//});
 
 Route::post('/user/search','Admin\UserController@search');
 Route::post('/user/reset','Admin\UserController@updatePassword');
+Route::post('/user/delete','Admin\UserController@deleteUser');
+Route::delete('/user/delete/{user}','Admin\UserController@deletePermanentUser');
+Route::post('/user/restore','Admin\UserController@restoreUser');
+
 

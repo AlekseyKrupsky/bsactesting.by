@@ -50,13 +50,15 @@
                                         <a href="{{route('teachers')}}">Преподаватели</a>
                                     </li>
                                     <li>
-                                        <a href="{{route('reset_password')}}">Сброс паролей</a>
+                                        <a href="{{route('reset_password')}}">Управление</a>
                                     </li>
                                         @endif
                                 </ul>
                             </li>
-                            @if(Auth::user()->role=='admin')
+                            @if(Auth::user()->role=='teacher')
                             <li><a href="{{route('groups')}}">Группы</a></li>
+                            @endif
+                            @if(Auth::user()->role=='admin')
                             <li><a href="{{route('subjects')}}">Предметы</a></li>
                             @endif
                         @endif

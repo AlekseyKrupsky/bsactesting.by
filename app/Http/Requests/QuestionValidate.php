@@ -24,7 +24,7 @@ class QuestionValidate extends FormRequest
     public function rules()
     {
         return [
-            'question'=>'required|max:450',
+            'question'=>'required|max:650',
 //            'question'=>'required|unique:questions,text|max:255',
             'answer.*.text'=>'required|bail|max:255',
             'answer.*.file'=>'nullable|image',
@@ -37,6 +37,7 @@ class QuestionValidate extends FormRequest
     public function messages()
     {
         return [
+            'question.max' => 'Длина вопроса не должна превышать 650 символов',
             'question.required' => 'Поле "вопрос" обязательно для заполнения',
 //          'question.unique' => 'Такой вопрос уже существует',
             'image'=>'Загружаемые файлы должны быть изображениями',
