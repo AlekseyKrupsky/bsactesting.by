@@ -46,13 +46,14 @@
                                         <a href="{{route('new_users')}}">Новые пользователи</a>
                                     </li>
                                     @if(Auth::user()->role=='admin')
-                                    <li>
-                                        <a href="{{route('teachers')}}">Преподаватели</a>
-                                    </li>
+                                        <li>
+                                            <a href="{{route('teachers')}}">Преподаватели</a>
+                                        </li>
+                                    @endif
+
                                     <li>
                                         <a href="{{route('reset_password')}}">Управление</a>
                                     </li>
-                                        @endif
                                 </ul>
                             </li>
                             @if(Auth::user()->role=='teacher' || Auth::user()->role=='admin')
