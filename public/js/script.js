@@ -100,8 +100,6 @@ timer = setTimeout(myTimer,1000);
 }
 
 
-
-
 //$('.timer')
 
 // $('.complete-test').click(function (eo) {
@@ -136,4 +134,12 @@ $("#imstudent").click( function(){
 
 $("#imteacher").click( function(){
     if( $(this).is(':checked') ) $('.student_reg_form').hide();
+});
+
+
+$('.delete_group').click(function (eo) {
+    eo.preventDefault();
+    if (confirm('Вы собираетесь удалить группу. Все студенты из этой группы и их результаты будут удалены')) {
+        $('.delete_group').parent('form').submit();
+    }
 });

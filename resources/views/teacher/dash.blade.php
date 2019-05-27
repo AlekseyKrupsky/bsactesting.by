@@ -62,7 +62,7 @@
                         <td>
                             @if($test->isComplete($user->id)==-2)
                                 {{\App\Helpers\Helper::marks($user,$test->id)}}
-                                <a href="" class="btn btn-success">+</a>
+                                <a title="Разрешить пересдать" href="{{route('retake',[$test->id,$user->id])}}" class="btn btn-success">+</a>
                                 @elseif($test->isComplete($user->id)==0)
                                     Сдает
                                 @elseif($test->isComplete($user->id)==-1)

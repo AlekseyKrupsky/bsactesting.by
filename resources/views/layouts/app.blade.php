@@ -55,7 +55,7 @@
                                         @endif
                                 </ul>
                             </li>
-                            @if(Auth::user()->role=='teacher')
+                            @if(Auth::user()->role=='teacher' || Auth::user()->role=='admin')
                             <li><a href="{{route('groups')}}">Группы</a></li>
                             @endif
                             @if(Auth::user()->role=='admin')

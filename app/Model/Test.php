@@ -36,30 +36,31 @@ class Test extends Model
         $user_id?true:$user_id=\Auth::user()->id;
 
             $this->stdanswers()->where('user_id',$user_id);
+            $marks = range(0,10);
 
+        if($this->retakes()->where('user_id',$user_id)->exists()) {
 
-        $marks = range(0,10);
+            return 2; // Разрешено пересдать
 
+        }
 
-        if(!$this->stdanswers()->where('user_id',$user_id)->get()->count()) {
+        if(!$this->stdanswers()->where('user_id',$user_id)->exists()) {
             return 1;//'Пройти'; //Пусто
         }
 
-        else if($this->stdanswers()->where('user_id',$user_id)->whereNull('mark')->get()->count()
-            && time()-$this->stdanswers()->where('user_id',$user_id)->get()->last()->created_at->timestamp>$this->time*60) {
 
-            return -2;// Не отправил результат
-        }
+        else if($this->stdanswers()->where('user_id',$user_id)->get()->last()->mark === null) {
 
-        else if($this->stdanswers()->where('user_id',$user_id)->whereNull('mark')->get()->last()) {
+            if(time()-$this->stdanswers()->where('user_id',$user_id)->get()->last()->created_at->timestamp>$this->time*60) {
+                return -2;  // Не отправил результат
+            }
+
             return 0;//'Продолжить'; //Сдает
 
         }
 
         else if($this->stdanswers->whereIn('mark',$marks)->where('user_id',$user_id)->count()){
-            if($this->retakes()->where('user_id',$user_id)->get()->count()) {
-                return 2; // Разрешено пересдать
-            }
+
                 
             return -1;//'Сдан'; //Оценка
         }

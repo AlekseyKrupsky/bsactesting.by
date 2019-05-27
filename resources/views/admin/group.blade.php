@@ -61,8 +61,8 @@
                     <form action="{{route('one_group',$group->id)}}" method="post">
                             {{csrf_field()}}
                             {{method_field('delete')}}
-
-                            <input class="btn btn-danger" type="submit" value="Удалить">
+                        <button class="delete_group btn btn-danger">Удалить</button>
+                            {{--<input class="" type="submit" value="Удалить">--}}
                         </form>
                         </div>
                 </div>

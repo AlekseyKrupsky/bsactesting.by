@@ -44,6 +44,7 @@ class TeachersController extends Controller
 
     public function retake($test_id,$user_id)
     {
+
         User::find($user_id)->addRetake($test_id);
         return back();
     }
