@@ -26,7 +26,7 @@
                 @foreach($questions as $question)
 
                     <div class="form-group">
-                        <h3>{{$question->text}}</h3>
+                        <pre class="question-pre">{{$question->text}}</pre>
                         @foreach($question->images()->get() as $image)
                             <img src="/{{$image->path}}" alt="" width="300">
                         @endforeach

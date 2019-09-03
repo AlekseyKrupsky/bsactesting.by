@@ -254,3 +254,7 @@ font-size: 21px;
     background: white;
     padding: 5px;
 }
+
+.question-pre {
+    white-space: pre-wrap;
+}
