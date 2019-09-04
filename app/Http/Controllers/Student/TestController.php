@@ -23,19 +23,15 @@ class TestController extends Controller
 
         foreach ($tests as $test) {
             $test->isComplete = $test->isComplete();
+            if(Auth::user()->role =='teacher' && $test->isComplete==-2){
+//                $test->delete();
+                Auth::user()->stdanswers->where('test_id',$test->id)->first()->delete();
+                $test->isComplete = $test->isComplete();
+            }
+
+//            dump($test);
         }
 
-
-//        dump($tests);
-
-//        dump(StdAnswer::whereNull('mark')->get());
-//        dump(StdAnswer::whereNotNull('mark')->get());
-
-//        dump($std_ans);
-
-
-//        $std_ans = StdAnswer::where('user_id',Auth::user()->id)->get();
-//        dump($std_ans);
         return view('student.tests',['tests'=>$tests]);
     }
     
@@ -133,6 +129,9 @@ class TestController extends Controller
     public function result($id)
     {
         $mark = Auth::user()->stdanswers->where('test_id',$id)->last()->mark;
+        if(Auth::user()->role == 'teacher') {
+            Auth::user()->stdanswers->where('test_id',$id)->first()->delete();
+        }
         return view('student.result',['mark'=>$mark]);
     }
 
