@@ -109,17 +109,16 @@ class GroupController extends Controller
     public function destroy($id)
     {
         //
-
         $group = Group::find($id);
 
         $users = $group->users;
 
         foreach ($users as $user) {
-            $user->delete();
+            $user->deleteItem();
         }
         $name = $group->name;
         $group->delete();
-
+//
         return back()->with('message','Группа '.$name.' была успешно удалена');
     }
 }

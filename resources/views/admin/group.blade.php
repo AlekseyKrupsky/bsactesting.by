@@ -25,7 +25,6 @@
                     <form action="{{route('one_group',$group->id)}}" method="post" class="col-md-9  align-center">
                         {{csrf_field()}}
                     <div class="row col-md-3">
-                        {{--{{$loop->index+1}}--}}
                         <input type="text" class="form-control" name="name" value="{{$group->name}}" >
                     </div>
 
@@ -56,13 +55,11 @@
                             <input type="submit" class="btn btn-success" value="Сохранить">
                         </div>
                     </form>
-                    {{--</form>--}}
                         <div class="col-md-3">
-                    <form action="{{route('one_group',$group->id)}}" method="post">
+                    <form action="{{route('one_group',$group->id)}}" method="post" id="f{{$loop->index}}">
                             {{csrf_field()}}
                             {{method_field('delete')}}
-                        <button class="delete_group btn btn-danger">Удалить</button>
-                            {{--<input class="" type="submit" value="Удалить">--}}
+                            <input class="delete_group btn btn-danger" type="submit" value="Удалить" form="f{{$loop->index}}">
                         </form>
                         </div>
                 </div>

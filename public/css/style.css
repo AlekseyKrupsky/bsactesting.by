@@ -257,4 +257,12 @@ font-size: 21px;
 
 .question-pre {
     white-space: pre-wrap;
+    user-select: none;
+}
+.test-answer {
+    user-select: none;
+}
+
+.test-form {
+    padding-bottom: 20px;
 }

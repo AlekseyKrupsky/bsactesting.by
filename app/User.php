@@ -83,4 +83,11 @@ class User extends Authenticatable
         $this->retakes()->create(['test_id'=>$test_id]);
     }
 
+    public function deleteItem()
+    {
+        $this->stdanswers()->delete();
+        $this->retakes()->delete();
+        $this->delete();
+    }
+
 }
