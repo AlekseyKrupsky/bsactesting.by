@@ -103,4 +103,26 @@ class Question extends Model
         Image::create(['path'=>$path,'model'=>'question','model_id'=>$this->id]);
     }
 
+    public function deleteItem()
+    {
+        $images_q = $this->images()->get();
+        $paths = $images_q->pluck('path')->toArray();
+
+        $answers = $this->answers->pluck('id')->toArray();
+
+        $images_a = Image::where('model','answer')->whereIn('model_id',$answers)->get();
+        $paths = array_merge($paths,$images_a->pluck('path')->toArray());
+
+        $paths_id = $images_q->pluck('id')->toArray();
+        $paths_id = array_merge($paths_id,$images_a->pluck('id')->toArray());
+
+        Image::destroy($paths_id);
+
+        Answer::destroy($answers);
+
+        File::delete($paths);
+
+        $this->delete();
+    }
+
 }

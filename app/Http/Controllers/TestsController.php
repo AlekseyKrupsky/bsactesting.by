@@ -127,7 +127,7 @@ class TestsController extends Controller
     {
         $test = Test::find($id);
         if(Auth::user()->haveAccess($test)) {
-            $test->delete();
+            $test->deleteItem();
             return redirect(route('tests'));
         }
         else $error = 'Произошла ошибка. Материал не удален';

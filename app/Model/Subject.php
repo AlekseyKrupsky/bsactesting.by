@@ -20,4 +20,13 @@ class Subject extends Model
         return $this->hasMany('App\Model\Test');
     }
 
+    public function deleteItem()
+    {
+        $tests = $this->tests;
+        foreach ($tests as $test) {
+            $test->deleteItem();
+        }
+        $this->delete();
+    }
+
 }

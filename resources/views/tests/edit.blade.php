@@ -66,7 +66,7 @@
                         <div class="col-md-6">
                             <select name="status" id="status" class="form-control" @if($questions->count()==0) disabled @endif>
                                 <option value="build" @if($test->status=='build' || $questions->count()==0) selected @endif>Создание</option>
-                                <option value="ready" @if($test->status=='ready' && $questions->count()>0) selected @endif>Рабочий</option>
+                                <option value="ready" @if($test->status=='ready' && $questions->count()>0) selected @endif>Опубликован</option>
                                 <option value="changing" @if($test->status=='changing' && $questions->count()>0) selected @endif>Изменение</option>
                             </select>
                         </div>

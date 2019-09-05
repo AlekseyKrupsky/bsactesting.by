@@ -95,4 +95,18 @@ class Test extends Model
             $relation->update(['question_info'=>$question_info,'mark_info'=>$mark_info]);
         else $relation->create(['question_info'=>$question_info,'mark_info'=>$mark_info]);
     }
+
+    public function deleteItem()
+    {
+        $questions = $this->questions;
+        foreach ($questions as $question) {
+            $question->deleteItem();
+        }
+        if($this->mark_system()->first()) {
+            $this->mark_system()->first()->delete();
+        }
+
+        $this->stdanswers()->delete();
+        $this->delete();
+    }
 }

@@ -114,24 +114,11 @@ class QuestionController extends Controller
 
     public function destroy($id)
     {
+//permissions check
+        $question = Question::find($id);
+        $question->deleteItem();
 
-        $images_q = Question::find($id)->images()->get();
-        $paths = $images_q->pluck('path')->toArray();
 
-
-        $answers = Question::find($id)->answers->pluck('id')->toArray();
-
-        $images_a = Image::where('model','answer')->whereIn('model_id',$answers)->get();
-        $paths = array_merge($paths,$images_a->pluck('path')->toArray());
-
-        $paths_id = $images_q->pluck('id')->toArray();
-        $paths_id = array_merge($paths_id,$images_a->pluck('id')->toArray());
-
-        Image::destroy($paths_id);
-
-        $status = File::delete($paths);
-
-        Question::destroy($id);
         return back();
     }
 

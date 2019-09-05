@@ -29,7 +29,7 @@ class SubjectController extends Controller
     {
         $subject = Subject::find($id);
         $name = $subject->name;
-        $subject->delete();
+        $subject->deleteItem();
         return back()->with('message','Предмет \''.$name.'\' был успешно удален');
     }
 
