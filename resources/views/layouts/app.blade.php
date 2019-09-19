@@ -68,6 +68,7 @@
                             <li><a href="{{route('teacher')}}">Страница преподавателя</a></li>
                         @endif
                         <li><a href="{{route('show_tests')}}">Пройти тест</a></li>
+                        <li><a href="{{route('show_tests')}}">Материалы</a></li>
                     </ul>
             @endif
             <!-- Right Side Of Navbar -->
