@@ -18,54 +18,53 @@ class QuestionController extends Controller
     {
         $test = Test::find($id);
 
-        return view('questions.new_vue',['test'=>$test]);
+        return view('questions.new_vue', ['test' => $test]);
     }
 
     public function store(QuestionValidate $request, $id)
     {
-        $quest_id = Test::find($id)->addQuestion($request->question,$request->cost);
+        $quest_id = Test::find($id)->addQuestion($request->question, $request->cost);
         $question = Question::find($quest_id);
 
         $question->addAnswer($request->answer);
 
-        if($request->image)
-        {
-            $name = Helper::filename($request->image,'img/questions/');
+        if ($request->image) {
+            $name = Helper::filename($request->image, 'img/questions/');
             $question->addImage($name);
         }
 
-        return response()->json('Вопрос добавлен',200);
+        return response()->json('Вопрос добавлен', 200);
     }
 
     public function edit($id)
     {
-        $question = Question::where('questions.id',$id)
-        ->join('tests','questions.test_id','=','tests.id')
-            ->select('questions.id as id','text','cost','name','mark_system','test_id')
+        $question = Question::where('questions.id', $id)
+            ->join('tests', 'questions.test_id', '=', 'tests.id')
+            ->select('questions.id as id', 'text', 'cost', 'name', 'mark_system', 'test_id')
             ->first(); //join test
 
 
-        if($question->images()->get()->count())
-        $question_images = '/'.$question->images()->get()->first()->path;
+        if ($question->images()->get()->count())
+            $question_images = '/' . $question->images()->get()->first()->path;
         else $question_images = '';
 
-        $answers = $question->answers()->select('correct','id','text')->get();
+        $answers = $question->answers()->select('correct', 'id', 'text')->get();
 
-        $answer_images = Image::whereIn('model_id',$answers->pluck('id')->toArray())
-            ->where('model','answer')->get();
+        $answer_images = Image::whereIn('model_id', $answers->pluck('id')->toArray())
+            ->where('model', 'answer')->get();
 
         foreach ($answers as $answer) {
-            if($answer_images->where('model_id',$answer->id)->count())
-            $answer->path =  '/'.$answer_images->where('model_id',$answer->id)->first()->path;
+            if ($answer_images->where('model_id', $answer->id)->count())
+                $answer->path = '/' . $answer_images->where('model_id', $answer->id)->first()->path;
             else $answer->path = '';
         }
 
-        $answers=$answers->toJson();
+        $answers = $answers->toJson();
 
-        return view('questions.edit_vue',[
-            'question'=>$question,
-            'question_images'=>$question_images,
-            'answers'=>$answers,
+        return view('questions.edit_vue', [
+            'question' => $question,
+            'question_images' => $question_images,
+            'answers' => $answers,
         ]);
     }
 
@@ -73,12 +72,12 @@ class QuestionController extends Controller
     {
         $question = Question::find($id);
         $question->update([
-            'text'=>$request->question,
-            'cost'=>$request->cost,
+            'text' => $request->question,
+            'cost' => $request->cost,
         ]);
         $question->save();
 
-        if(!$request->path || ($request->path && !empty($request->image))) {
+        if (!$request->path || ($request->path && !empty($request->image))) {
             $images_q = Question::find($id)->images()->get();
             $paths = $images_q->pluck('path')->toArray();
             $paths_id = $images_q->pluck('id')->toArray();
@@ -86,25 +85,25 @@ class QuestionController extends Controller
             File::delete($paths);
         }
 
-        if($request->path && !empty($request->image)) {
-            $name = Helper::filename($request->image,'img/questions/');
+        if ($request->path && !empty($request->image)) {
+            $name = Helper::filename($request->image, 'img/questions/');
             $question->addImage($name);
         }
 
         $new_answers = [];
         $old_answers = [];
         foreach ($request->answer as $key => $item) {
-            if($item['new'])
-            $new_answers[] = $item;
+            if ($item['new'])
+                $new_answers[] = $item;
             else $old_answers[$key] = $item;
         }
 
 
         $question->updateAnswers($old_answers);
-        
+
         $question->addAnswer($new_answers);
 
-        return response()->json('Вопрос обновлен',200);
+        return response()->json('Вопрос обновлен', 200);
     }
 
     public function destroy($id)

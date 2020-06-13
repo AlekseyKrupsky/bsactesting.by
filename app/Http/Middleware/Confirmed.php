@@ -21,13 +21,12 @@ class Confirmed
             (Auth::user()->role == 'admin' ||
             Auth::user()->role == 'teacher'||
             Auth::user()->role == 'student') &&
-            Auth::user()->deleted_at==null)
+            Auth::user()->deleted_at == null)
             return  $next($request);
-        if(Auth::user()->deleted_at!=null) {
+        if (Auth::user()->deleted_at != null) {
             return new Response(view('access_denied',['message'=>'Ваш профиль был удален']));
         }
 
-        return new Response(view('access_denied',['message'=>'Только подтвержденные пользователи имеют доступ к этой странице']));
-
+        return new Response(view('access_denied',['message'=>'Только подтвержденные пользователи имеют доступ к этой странице. Если вы только что зарегистрировались, подождите пока преподаватель активирует вашу учетную запись.']));
     }
 }

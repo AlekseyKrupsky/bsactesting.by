@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h2>Доступ к этой странице ограничен. Вернутся на <a href="{{route('home')}}">главную</a></h2>
+        <h3>Доступ к этой странице ограничен. Вернутся на <a href="{{route('home')}}">главную</a></h3>
         @if(!empty($message))
             <p>{{$message}}</p>
             @endif
