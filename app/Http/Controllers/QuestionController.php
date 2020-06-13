@@ -17,13 +17,12 @@ class QuestionController extends Controller
     public function create($id)
     {
         $test = Test::find($id);
-//        return view('questions.new',['test'=>$test]);
+
         return view('questions.new_vue',['test'=>$test]);
     }
 
     public function store(QuestionValidate $request, $id)
     {
-
         $quest_id = Test::find($id)->addQuestion($request->question,$request->cost);
         $question = Question::find($quest_id);
 
@@ -40,7 +39,6 @@ class QuestionController extends Controller
 
     public function edit($id)
     {
-
         $question = Question::where('questions.id',$id)
         ->join('tests','questions.test_id','=','tests.id')
             ->select('questions.id as id','text','cost','name','mark_system','test_id')
@@ -73,8 +71,6 @@ class QuestionController extends Controller
 
     public function update(QuestionValidate $request, $id)
     {
-
-
         $question = Question::find($id);
         $question->update([
             'text'=>$request->question,
@@ -109,15 +105,12 @@ class QuestionController extends Controller
         $question->addAnswer($new_answers);
 
         return response()->json('Вопрос обновлен',200);
-
     }
 
     public function destroy($id)
     {
-//permissions check
         $question = Question::find($id);
         $question->deleteItem();
-
 
         return back();
     }
