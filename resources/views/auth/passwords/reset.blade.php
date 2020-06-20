@@ -8,27 +8,26 @@
                 <div class="panel-heading">Сброс пароля</div>
 
                 <div class="panel-body">
-                    <form class="form-horizontal" method="POST" action="{{ route('password.request') }}">
+                    <form class="form-horizontal" method="POST" action="{{ route('password.reset') }}">
                         {{ csrf_field() }}
-
                         <input type="hidden" name="token" value="{{ $token }}">
 
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">E-Mail</label>
+                        <div class="form-group{{ $errors->has('old_password') ? ' has-error' : '' }}">
+                            <label for="old_password" class="col-md-4 control-label">Старый пароль</label>
 
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ $email or old('email') }}" required autofocus>
+                                <input id="old_password" type="password" class="form-control" name="old_password" required>
 
-                                @if ($errors->has('email'))
+                                @if ($errors->has('old_password'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
+                                        <strong>{{ $errors->first('old_password') }}</strong>
                                     </span>
                                 @endif
                             </div>
                         </div>
 
                         <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-4 control-label">Пароль</label>
+                            <label for="password" class="col-md-4 control-label">Новый пароль</label>
 
                             <div class="col-md-6">
                                 <input id="password" type="password" class="form-control" name="password" required>
@@ -42,7 +41,7 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
-                            <label for="password-confirm" class="col-md-4 control-label">Подтвеждение пароля</label>
+                            <label for="password-confirm" class="col-md-4 control-label">Подтвеждение нового пароля</label>
                             <div class="col-md-6">
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
 

@@ -12,21 +12,14 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::prefix(env('URL_PREFIX') ? env('URL_PREFIX') : '')->group(function () {
+    Route::middleware('auth:api')->get('/user', function (Request $request) {
+        return $request->user();
+    });
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+    Route::post('/user/search', 'Admin\UserController@search');
+    Route::post('/user/reset', 'Admin\UserController@updatePassword');
+    Route::post('/user/delete', 'Admin\UserController@deleteUser');
+    Route::delete('/user/delete/{user}', 'Admin\UserController@deletePermanentUser');
+    Route::post('/user/restore', 'Admin\UserController@restoreUser');
 });
-
-
-
-//Route::post('/test',function () {
-//   return 12345;
-//});
-
-Route::post('/user/search','Admin\UserController@search');
-Route::post('/user/reset','Admin\UserController@updatePassword');
-Route::post('/user/delete','Admin\UserController@deleteUser');
-Route::delete('/user/delete/{user}','Admin\UserController@deletePermanentUser');
-Route::post('/user/restore','Admin\UserController@restoreUser');
-
-

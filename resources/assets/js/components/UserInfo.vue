@@ -6,97 +6,88 @@
         <button class="form-group" @click="save">Сохранить</button>
         <button class="form-group" v-show="!deleted_at" @click="delete_user">Удалить</button>
         <button class="form-group" v-show="deleted_at" @click="restore_user">Восстановить</button>
-        <button class="form-group" v-show="deleted_at" @click="delete_permanent" >Удалить навегда</button>
+        <button class="form-group" v-show="deleted_at" @click="delete_permanent">Удалить навегда</button>
     </div>
 </template>
 
 
 <script type="text/babel">
     export default {
-        props:['user','mode'],
+        props: ['user', 'mode', 'url_prefix'],
         data() {
             return {
                 pass: '',
                 name: this.user.name,
-                email:this.user.email,
-                id:this.user.id,
-                deleted_at:this.user.deleted_at,
+                email: this.user.email,
+                id: this.user.id,
+                deleted_at: this.user.deleted_at,
             }
         },
-        methods:{
+        methods: {
             save() {
-                // console.log(this.id);
-                // console.log(this.pass);
-                axios.post('/api/user/reset',{id:this.id,pass:this.pass}).then(response => {
-                    // this.users = response.data;
-                    console.log(response.data.message);
-                this.$emit('changepass',{
-                   type:"success",text:response.data.message
-                })
-            }).catch(error => {
-                    if (error.response) {
-                    console.log(error.response);
-                    this.$emit('changepass',{
-                        type:"error",text:error.response.data
+                axios.post('/api' + this.url_prefix + '/user/reset', {id: this.id, pass: this.pass}).then(response => {
+                    this.$emit('changepass', {
+                        id: this.id,
+                        type: "success",
+                        text: [response.data.message]
                     })
-                }
-            });
+                }).catch(error => {
+                    if (error.response) {
+                        this.$emit('changepass', {
+                            id: this.id,
+                            type: "error",
+                            text: error.response.data.pass
+                        })
+                    }
+                });
             },
 
             delete_user() {
-                axios.post('/api/user/delete',{id:this.id}).then(response => {
-                    // this.users = response.data;
-
+                axios.post('/api' + this.url_prefix + '/user/delete', {id: this.id}).then(response => {
                     this.deleted_at = true;
-
-                    // this.$emit('changepass',{
-                    //     type:"success",text:response.data.message
-                    // })
+                    this.$emit('deleteuser', {
+                        id: this.id,
+                        type: "success",
+                    })
                 }).catch(error => {
                     if (error.response) {
-                        console.log(error.response);
-                        // this.$emit('changepass',{
-                        //     type:"error",text:error.response.data
-                        // })
+                        this.$emit('deleteuser', {
+                            id: this.id,
+                            type: "error",
+                        })
                     }
                 });
             },
 
             restore_user() {
-                axios.post('/api/user/restore',{id:this.id}).then(response => {
-
+                axios.post('/api' + this.url_prefix + '/user/restore', {id: this.id}).then(response => {
                     this.deleted_at = false;
-
-                    // this.users = response.data;
-                    // this.$emit('changepass',{
-                    //     type:"success",text:response.data.message
-                    // })
+                    this.$emit('restoreuser', {
+                        id: this.id,
+                        type: "success",
+                    })
                 }).catch(error => {
                     if (error.response) {
-                        console.log(error.response);
-                        // this.$emit('changepass',{
-                        //     type:"error",text:error.response.data
-                        // })
+                        this.$emit('restoreuser', {
+                            id: this.id,
+                            type: "error",
+                        })
                     }
                 });
             },
 
             delete_permanent() {
-                axios.delete('/api/user/delete/'+this.id).then(response => {
-                    // this.users = response.data;
-
-                    // this.deleted_at = true;
-
-                    console.log(this.id);
-                    // console.log(response);
-
-                    this.$emit('delete_permanent',this.id);
+                axios.delete('/api' + this.url_prefix + '/user/delete/' + this.id).then(response => {
+                    this.$emit('delete_permanent', {
+                        type: "success",
+                        id: this.id
+                    });
                 }).catch(error => {
                     if (error.response) {
-                        console.log(error.response);
-                        // this.$emit('changepass',{
-                        //     type:"error",text:error.response.data
-                        // })
+                        this.$emit('delete_permanent', {
+                            id: this.id,
+                            type: "error",
+                        })
                     }
                 });
             },

@@ -24,8 +24,6 @@
         methods:{
             myMethod() {
                 axios.post('/api/test').then(response => {
-                    console.log(response);
-                    console.log(this.data);
             })
             }
 

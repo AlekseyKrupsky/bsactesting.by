@@ -7,7 +7,7 @@
             <div class="form-group">
                 <label class="col-md-4 control-label">Вопрос</label>
                 <div class="col-md-8">
-                    <textarea  class="form-control" v-model="question" required></textarea>
+                    <textarea class="form-control" v-model="question" required></textarea>
                 </div>
             </div>
             <markcost v-if="system=='difficult'" v-model="cost"></markcost>
@@ -47,38 +47,37 @@
 
 <script type="text/babel">
     export default {
-        props:[
+        props: [
             'question_p',
             'question_image',
             'answers_p',
-           'route',
+            'route',
             'test_route'
         ],
         data() {
             return {
-                question:'',
-                name:'',
-                system:'',
-                cost:1,
-                answers:[],
-                ansId:2,
-                question_array:'',
-                image_path:this.question_image,
-                file:''
+                question: '',
+                name: '',
+                system: '',
+                cost: 1,
+                answers: [],
+                ansId: 2,
+                question_array: '',
+                image_path: this.question_image,
+                file: ''
             }
 
         },
         mounted() {
-            // this.test_array = JSON.parse(this.test);
             this.question_array = JSON.parse(this.question_p);
             this.cost = this.question_array.cost;
             this.question = this.question_array.text;
-            this.system=this.question_array.mark_system;
-            this.name=this.question_array.name;
+            this.system = this.question_array.mark_system;
+            this.name = this.question_array.name;
             this.answers = JSON.parse(this.answers_p);
             this.answers.forEach(function (item) {
-                 item.file = '';
-                 item.new = 0;
+                item.file = '';
+                item.new = 0;
                 return item;
             })
         },
@@ -86,37 +85,34 @@
             addAnswer() {
                 this.answers.push(
                     {
-                        id:this.ansId,
-                        correct:0,
-                        text:'',
-                        path:'',
-                        file:'',
-                        new:1
+                        id: this.ansId,
+                        correct: 0,
+                        text: '',
+                        path: '',
+                        file: '',
+                        new: 1
                     }
                 );
                 this.ansId++;
-                // console.log(this.answers)
             },
             changeAnswer(data) {
                 var id = data.id;
                 this.answers = this.answers.filter(function (value) {
-                    if(value.id===id) {
-                        // console.log(id);
-                        value.id=id;
-                        value.correct=data.correct;
-                        value.text=data.text;
-                        value.path=data.path;
-                        value.file=data.file;
+                    if (value.id === id) {
+                        value.id = id;
+                        value.correct = data.correct;
+                        value.text = data.text;
+                        value.path = data.path;
+                        value.file = data.file;
                     }
 
                     return value;
                 });
-                // console.log(this.answers);
             },
             deleteAnswer(data) {
                 var id = data.id;
                 this.answers = this.answers.filter(function (value) {
-                    if(value.id!==id) return value;
+                    if (value.id !== id) return value;
                 })
             },
             select_img(data) {
@@ -125,49 +121,45 @@
             },
             addQuestion() {
                 let formData = new FormData();
-                // console.log(this.test_a)
                 formData.append('_method', 'PATCH');
-                formData.append('image',this.file);
-
+                formData.append('image', this.file);
                 formData.append('question', this.question);
                 formData.append('cost', this.cost);
-                if(this.image_path) formData.append('path',1);
-                else formData.append('path','');
 
-                for(let i=0;i<this.answers.length;i++) {
+                if (this.image_path) formData.append('path', 1);
+                else formData.append('path', '');
+
+                for (let i = 0; i < this.answers.length; i++) {
                     let answer = this.answers[i];
-                    formData.append('answer['+answer.id+'][text]',answer.text);
-                    formData.append('answer['+answer.id+'][correct]',answer.correct);
-                    formData.append('answer['+answer.id+'][file]',answer.file);
-                    formData.append('answer['+answer.id+'][new]',answer.new);
-                    if(answer.path) formData.append('answer['+answer.id+'][path]',1);
-                    else formData.append('answer['+answer.id+'][path]','');
+                    formData.append('answer[' + answer.id + '][text]', answer.text);
+                    formData.append('answer[' + answer.id + '][correct]', answer.correct);
+                    formData.append('answer[' + answer.id + '][file]', answer.file);
+                    formData.append('answer[' + answer.id + '][new]', answer.new);
+                    if (answer.path) formData.append('answer[' + answer.id + '][path]', 1);
+                    else formData.append('answer[' + answer.id + '][path]', '');
                 }
-                // console.log(this.answers);
-                // formData.append('data',123);
-                // console.log(formData);
-                // console.log(formData.getAll());
 
-                axios.post(this.route, formData, {headers: {
-                        'Content-Type': 'multipart/form-data',
-                    }}
+                axios.post(this.route, formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        }
+                    }
                 ).then(response => {
-                   this.$emit('showmessage',{messages:[response.data],type:'success'});
+                    this.$emit('showmessage', {messages: [response.data], type: 'success'});
                     this.answers.forEach(function (item) {
                         item.file = '';
                         item.new = 0;
+
                         return item;
                     })
                 }).catch(error => {
-                    // console.log(error.response.data);
-
                     var messages = [];
-                    for(let error_messages in error.response.data) {
-                        for(let i=0;i<error.response.data[error_messages].length; i++) {
+                    for (let error_messages in error.response.data) {
+                        for (let i = 0; i < error.response.data[error_messages].length; i++) {
                             messages.push(error.response.data[error_messages][i]);
                         }
                     }
-                    this.$emit('showmessage',{messages:messages,type:'error'});
+                    this.$emit('showmessage', {messages: messages, type: 'error'});
                 })
             }
         }

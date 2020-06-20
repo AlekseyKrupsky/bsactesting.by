@@ -44369,12 +44369,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     methods: {
         myMethod: function myMethod() {
-            var _this = this;
-
-            axios.post('/api/test').then(function (response) {
-                console.log(response);
-                console.log(_this.data);
-            });
+            axios.post('/api/test').then(function (response) {});
         }
     }
 });
@@ -44504,17 +44499,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['url_prefix'],
     data: function data() {
         return {
             name: '',
             email: '',
             users: [],
-            message: [],
-            type: '',
+            messages: [],
             users_type: 'all',
-            filtered: []
+            filtered: [],
+            key: 0
         };
     },
 
@@ -44529,45 +44531,90 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     _this.filtered.push(user);
                 }
             });
-
-            console.log(this.filtered);
         },
-        delete_permanent: function delete_permanent(id) {
+        delete_permanent: function delete_permanent(data) {
             var _this2 = this;
 
-            var array = this.users;
-            this.users = [];
-            array.forEach(function (user) {
-                if (user.id !== id) _this2.users.push(user);
-                // console.log(123);
-            });
-
-            this.sort();
+            var users = this.users;
+            var id = data.id;
+            if (data.type === 'success') {
+                users.forEach(function (user) {
+                    if (user.id === id) {
+                        data.text = ['Пользователь ' + user.name + ' удален навсегда'];
+                    }
+                });
+                this.users = [];
+                users.forEach(function (user) {
+                    if (user.id !== id) _this2.users.push(user);
+                });
+                this.sort();
+            } else {
+                users.forEach(function (user) {
+                    if (user.id === id) {
+                        data.text = ['Ошибка при удалении пользователя ' + user.name];
+                    }
+                });
+            }
+            data.key = this.key;
+            this.key++;
+            this.messages.push(data);
         },
         onResponse: function onResponse(data) {
-            if (Array.isArray(data)) {
-                this.message = data.text;
-            } else {
-                this.message.push(data.text);
-            }
-            this.type = data.type;
+            data.key = this.key;
+            this.key++;
+            this.messages.push(data);
+        },
+        onDeleteUser: function onDeleteUser(data) {
+            var id = data.id;
+            var users = this.users;
+            users.forEach(function (user) {
+                if (user.id === id) {
+                    if (data.type === 'success') {
+                        data.text = ['Пользователь ' + user.name + ' успешно удален'];
+                    } else {
+                        data.text = ['Ошибка при удалении пользователя ' + user.name];
+                    }
+                }
+            });
+            data.key = this.key;
+            this.key++;
+            this.messages.push(data);
+        },
+        onRestoreUser: function onRestoreUser(data) {
+            var id = data.id;
+            var users = this.users;
+            users.forEach(function (user) {
+                if (user.id === id) {
+                    if (data.type === 'success') {
+                        data.text = ['Пользователь ' + user.name + ' успешно восстановлен'];
+                    } else {
+                        data.text = ['Ошибка при восстановлении пользователя ' + user.name];
+                    }
+                }
+            });
+            data.key = this.key;
+            this.key++;
+            this.messages.push(data);
+        },
+        deleteMessage: function deleteMessage(id) {
+            var _this3 = this;
+
+            var messages = this.messages;
+            this.messages = [];
+            messages.forEach(function (message) {
+                if (message.key !== id) {
+                    _this3.messages.push(message);
+                }
+            });
         }
     },
     mounted: function mounted() {
-        var _this3 = this;
+        var _this4 = this;
 
-        axios.post('/api/user/search').then(function (response) {
-            console.log(response);
-            _this3.users = response.data;
-            _this3.filtered = response.data;
-            // this.users.splice(0,this.users.length);
-            // for(let item in response.data) {
-            //     this.users.push({
-            //         name:response.data[item].name,
-            //         email:response.data[item].email,
-            //     })
-            // }
-            _this3.users.splice(_this3.users.length, 0);
+        axios.post('/api' + this.url_prefix + '/user/search').then(function (response) {
+            _this4.users = response.data;
+            _this4.filtered = response.data;
+            _this4.users.splice(_this4.users.length, 0);
         });
     }
 });
@@ -44705,9 +44752,15 @@ var render = function() {
           [
             _c("userinfo", {
               key: user.id,
-              attrs: { user: user, mode: _vm.users_type },
+              attrs: {
+                user: user,
+                mode: _vm.users_type,
+                url_prefix: _vm.url_prefix
+              },
               on: {
                 changepass: _vm.onResponse,
+                deleteuser: _vm.onDeleteUser,
+                restoreuser: _vm.onRestoreUser,
                 delete_permanent: _vm.delete_permanent
               }
             })
@@ -44716,7 +44769,22 @@ var render = function() {
         )
       }),
       _vm._v(" "),
-      _c("alert", { attrs: { message: _vm.message, type: _vm.type } })
+      _c(
+        "div",
+        { staticClass: "alerts" },
+        _vm._l(_vm.messages, function(message) {
+          return _c("alert", {
+            key: message.key,
+            attrs: {
+              message: message.text,
+              type: message.type,
+              id: message.key
+            },
+            on: { deletemessage: _vm.deleteMessage }
+          })
+        }),
+        1
+      )
     ],
     2
   )
@@ -44799,7 +44867,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['user', 'mode'],
+    props: ['user', 'mode', 'url_prefix'],
     data: function data() {
         return {
             pass: '',
@@ -44814,19 +44882,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         save: function save() {
             var _this = this;
 
-            // console.log(this.id);
-            // console.log(this.pass);
-            axios.post('/api/user/reset', { id: this.id, pass: this.pass }).then(function (response) {
-                // this.users = response.data;
-                console.log(response.data.message);
+            axios.post('/api' + this.url_prefix + '/user/reset', { id: this.id, pass: this.pass }).then(function (response) {
                 _this.$emit('changepass', {
-                    type: "success", text: response.data.message
+                    id: _this.id,
+                    type: "success",
+                    text: [response.data.message]
                 });
             }).catch(function (error) {
                 if (error.response) {
-                    console.log(error.response);
                     _this.$emit('changepass', {
-                        type: "error", text: error.response.data
+                        id: _this.id,
+                        type: "error",
+                        text: error.response.data.pass
                     });
                 }
             });
@@ -44834,61 +44901,53 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         delete_user: function delete_user() {
             var _this2 = this;
 
-            axios.post('/api/user/delete', { id: this.id }).then(function (response) {
-                // this.users = response.data;
-
+            axios.post('/api' + this.url_prefix + '/user/delete', { id: this.id }).then(function (response) {
                 _this2.deleted_at = true;
-
-                // this.$emit('changepass',{
-                //     type:"success",text:response.data.message
-                // })
+                _this2.$emit('deleteuser', {
+                    id: _this2.id,
+                    type: "success"
+                });
             }).catch(function (error) {
                 if (error.response) {
-                    console.log(error.response);
-                    // this.$emit('changepass',{
-                    //     type:"error",text:error.response.data
-                    // })
+                    _this2.$emit('deleteuser', {
+                        id: _this2.id,
+                        type: "error"
+                    });
                 }
             });
         },
         restore_user: function restore_user() {
             var _this3 = this;
 
-            axios.post('/api/user/restore', { id: this.id }).then(function (response) {
-
+            axios.post('/api' + this.url_prefix + '/user/restore', { id: this.id }).then(function (response) {
                 _this3.deleted_at = false;
-
-                // this.users = response.data;
-                // this.$emit('changepass',{
-                //     type:"success",text:response.data.message
-                // })
+                _this3.$emit('restoreuser', {
+                    id: _this3.id,
+                    type: "success"
+                });
             }).catch(function (error) {
                 if (error.response) {
-                    console.log(error.response);
-                    // this.$emit('changepass',{
-                    //     type:"error",text:error.response.data
-                    // })
+                    _this3.$emit('restoreuser', {
+                        id: _this3.id,
+                        type: "error"
+                    });
                 }
             });
         },
         delete_permanent: function delete_permanent() {
             var _this4 = this;
 
-            axios.delete('/api/user/delete/' + this.id).then(function (response) {
-                // this.users = response.data;
-
-                // this.deleted_at = true;
-
-                console.log(_this4.id);
-                // console.log(response);
-
-                _this4.$emit('delete_permanent', _this4.id);
+            axios.delete('/api' + this.url_prefix + '/user/delete/' + this.id).then(function (response) {
+                _this4.$emit('delete_permanent', {
+                    type: "success",
+                    id: _this4.id
+                });
             }).catch(function (error) {
                 if (error.response) {
-                    console.log(error.response);
-                    // this.$emit('changepass',{
-                    //     type:"error",text:error.response.data
-                    // })
+                    _this4.$emit('delete_permanent', {
+                        id: _this4.id,
+                        type: "error"
+                    });
                 }
             });
         }
@@ -45077,14 +45136,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['messages', 'mess_type'],
+    props: ['message', 'type', 'id'],
     data: function data() {
         return {
             css_class: '',
@@ -45092,16 +45146,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
     mounted: function mounted() {
-        console.log(this.mess_type);
-        if (this.mess_type == 'error') {
+        if (this.type == 'error') {
             this.css_class = 'alert alert-danger';
         }
-        if (this.mess_type == 'success') {
+        if (this.type == 'success') {
             this.css_class = 'alert alert-success';
         }
     },
 
-    methods: {}
+    methods: {
+        deleteMessage: function deleteMessage() {
+            this.$emit('deletemessage', this.id);
+        }
+    }
 });
 
 /***/ }),
@@ -45112,36 +45169,17 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    {
-      directives: [
-        {
-          name: "show",
-          rawName: "v-show",
-          value: !_vm.hide,
-          expression: "!hide"
-        }
-      ],
-      class: _vm.css_class,
-      on: {
-        click: function($event) {
-          _vm.hide = !_vm.hide
-        }
-      }
-    },
-    [
-      _c(
-        "ul",
-        _vm._l(_vm.messages, function(message) {
-          return _c("li", [
-            _vm._v("\n            " + _vm._s(message) + "\n        ")
-          ])
-        }),
-        0
-      )
-    ]
-  )
+  return _c("div", { class: _vm.css_class, on: { click: _vm.deleteMessage } }, [
+    _c(
+      "ul",
+      _vm._l(_vm.message, function(line) {
+        return _c("li", [
+          _vm._v("\n            " + _vm._s(line) + "\n        ")
+        ])
+      }),
+      0
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -45256,9 +45294,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['test', 'route', 'test_route'],
@@ -45304,13 +45339,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 file: ''
             });
             this.ansId++;
-            // console.log(this.answers)
         },
         changeAnswer: function changeAnswer(data) {
             var id = data.id;
             this.answers = this.answers.filter(function (value) {
                 if (value.id === id) {
-                    // console.log(id);
                     value.id = id;
                     value.correct = data.correct;
                     value.text = data.text;
@@ -45320,7 +45353,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
                 return value;
             });
-            console.log(this.answers);
         },
         deleteAnswer: function deleteAnswer(data) {
             var id = data.id;
@@ -45336,7 +45368,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this = this;
 
             var formData = new FormData();
-            // console.log(this.test_a)
             formData.append('image', this.file);
             formData.append('question', this.question);
             formData.append('cost', this.cost);
@@ -45347,18 +45378,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 formData.append('answer[' + answer.id + '][correct]', answer.correct);
                 formData.append('answer[' + answer.id + '][file]', answer.file);
             }
-            // formData.append('data',123);
-            // console.log(formData);
-            // console.log(formData.getAll());
-
-            axios.post(this.route, formData, { headers: {
+            axios.post(this.route, formData, {
+                headers: {
                     'Content-Type': 'multipart/form-data'
-                } }).then(function (response) {
+                }
+            }).then(function (response) {
                 console.log(response);
                 _this.$emit('showmessage', { messages: [response.data], type: 'success' });
                 _this.$emit('update');
             }).catch(function (error) {
-                // console.log(error.response.data);
                 var messages = [];
                 for (var error_messages in error.response.data) {
                     for (var _i = 0; _i < error.response.data[error_messages].length; _i++) {
@@ -45630,7 +45658,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
     mounted: function mounted() {
-        // this.test_array = JSON.parse(this.test);
         this.question_array = JSON.parse(this.question_p);
         this.cost = this.question_array.cost;
         this.question = this.question_array.text;
@@ -45655,13 +45682,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 new: 1
             });
             this.ansId++;
-            // console.log(this.answers)
         },
         changeAnswer: function changeAnswer(data) {
             var id = data.id;
             this.answers = this.answers.filter(function (value) {
                 if (value.id === id) {
-                    // console.log(id);
                     value.id = id;
                     value.correct = data.correct;
                     value.text = data.text;
@@ -45671,7 +45696,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
                 return value;
             });
-            // console.log(this.answers);
         },
         deleteAnswer: function deleteAnswer(data) {
             var id = data.id;
@@ -45687,12 +45711,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this = this;
 
             var formData = new FormData();
-            // console.log(this.test_a)
             formData.append('_method', 'PATCH');
             formData.append('image', this.file);
-
             formData.append('question', this.question);
             formData.append('cost', this.cost);
+
             if (this.image_path) formData.append('path', 1);else formData.append('path', '');
 
             for (var i = 0; i < this.answers.length; i++) {
@@ -45703,23 +45726,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 formData.append('answer[' + answer.id + '][new]', answer.new);
                 if (answer.path) formData.append('answer[' + answer.id + '][path]', 1);else formData.append('answer[' + answer.id + '][path]', '');
             }
-            // console.log(this.answers);
-            // formData.append('data',123);
-            // console.log(formData);
-            // console.log(formData.getAll());
 
-            axios.post(this.route, formData, { headers: {
+            axios.post(this.route, formData, {
+                headers: {
                     'Content-Type': 'multipart/form-data'
-                } }).then(function (response) {
+                }
+            }).then(function (response) {
                 _this.$emit('showmessage', { messages: [response.data], type: 'success' });
                 _this.answers.forEach(function (item) {
                     item.file = '';
                     item.new = 0;
+
                     return item;
                 });
             }).catch(function (error) {
-                // console.log(error.response.data);
-
                 var messages = [];
                 for (var error_messages in error.response.data) {
                     for (var _i = 0; _i < error.response.data[error_messages].length; _i++) {
@@ -46068,7 +46088,7 @@ exports = module.exports = __webpack_require__(64)(false);
 
 
 // module
-exports.push([module.i, "\nimg {\n    width:100px;\n}\n", ""]);
+exports.push([module.i, "\nimg {\n    width: 100px;\n}\n", ""]);
 
 // exports
 
@@ -46490,7 +46510,7 @@ var render = function() {
           "label",
           { staticClass: "btn btn-info", on: { click: function($event) {} } },
           [
-            _vm._v("Добавить изображение\n    "),
+            _vm._v("Добавить изображение\n        "),
             _c("input", {
               staticClass: "hidden",
               attrs: { type: "file" },

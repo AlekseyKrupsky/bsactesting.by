@@ -1,26 +1,26 @@
 <template>
-        <div v-if="!image" class="col-md-3">
-            <label @click="" class="btn btn-info">Добавить изображение
+    <div v-if="!image" class="col-md-3">
+        <label @click="" class="btn btn-info">Добавить изображение
             <input type="file" class="hidden" @change="onFileChange">
-            </label>
-        </div>
-        <div v-else class="col-md-3">
-            <img :src="image" />
-            <button @click="removeImage" class="btn btn-danger">Удалить</button>
-        </div>
+        </label>
+    </div>
+    <div v-else class="col-md-3">
+        <img :src="image"/>
+        <button @click="removeImage" class="btn btn-danger">Удалить</button>
+    </div>
 </template>
 
 <script type="text/babel">
     export default {
-        props:['image_path'],
+        props: ['image_path'],
         mounted() {
-            if(this.image_path) {
+            if (this.image_path) {
                 this.image = this.image_path;
             }
         },
         data() {
-            return{
-                image:''
+            return {
+                image: ''
             }
         },
         methods: {
@@ -38,13 +38,13 @@
 
                 reader.onload = (e) => {
                     vm.image = e.target.result;
-                    this.$emit('select_img',{path:vm.image,file:file});
+                    this.$emit('select_img', {path: vm.image, file: file});
                 };
                 reader.readAsDataURL(file);
             },
             removeImage: function (e) {
                 this.image = '';
-                this.$emit('select_img',{path:this.image,file:''})
+                this.$emit('select_img', {path: this.image, file: ''})
             }
         }
 
@@ -53,6 +53,6 @@
 
 <style>
     img {
-        width:100px;
+        width: 100px;
     }
 </style>

@@ -1,14 +1,14 @@
 <template>
     <div class="form-group answer">
         <div class="col-md-4">
-            <input type="checkbox"  class="check" name="rightAnswer[]" value="a1" v-model="correct">
-            <label  class="control-label btn btn-danger" @click="click">
+            <input type="checkbox" class="check" name="rightAnswer[]" value="a1" v-model="correct">
+            <label class="control-label btn btn-danger" @click="click">
                 Правильный
             </label>
             <label v-if="id>1" class="control-label btn btn-danger" @click="deleteAnswer">
                 Удалить
             </label>
-            <label class="control-label" >
+            <label class="control-label">
                 Текст ответа:
             </label>
         </div>
@@ -24,19 +24,19 @@
 
 <script type="text/babel">
     export default {
-        props:['answer'],
+        props: ['answer'],
         data() {
             return {
-                correct:this.answer.correct,
-                text:this.answer.text,
-                path:this.answer.path,
-                id:this.answer.id,
-                file:''
+                correct: this.answer.correct,
+                text: this.answer.text,
+                path: this.answer.path,
+                id: this.answer.id,
+                file: ''
             }
         },
         methods: {
-            click () {
-                this.correct?this.correct=0:this.correct=1;
+            click() {
+                this.correct ? this.correct = 0 : this.correct = 1;
                 this.changeAnswer();
             },
             select_img(data) {
@@ -46,17 +46,17 @@
             },
 
             deleteAnswer() {
-                this.$emit('delete',{
-                    id:this.id
+                this.$emit('delete', {
+                    id: this.id
                 })
             },
             changeAnswer() {
                 this.$emit('changeAns', {
-                    text:this.text,
-                    id:this.id,
-                    correct:this.correct,
-                    path:this.path,
-                    file:this.file
+                    text: this.text,
+                    id: this.id,
+                    correct: this.correct,
+                    path: this.path,
+                    file: this.file
                 })
             }
         }

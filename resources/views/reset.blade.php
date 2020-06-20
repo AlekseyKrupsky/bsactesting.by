@@ -2,6 +2,6 @@
 
 @section('content')
     <div class="container">
-        <reset></reset>
+        <reset url_prefix="{{env('URL_PREFIX') ? env('URL_PREFIX') : ''}}"></reset>
     </div>
 @endsection
